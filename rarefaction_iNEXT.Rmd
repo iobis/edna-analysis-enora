@@ -1,0 +1,972 @@
+---
+title: "Rarefaction curves of the 1rst batch for MiFish amplicon"
+author: "Enora Geslain"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    number_sections: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(iNEXT)
+library(ggplot2)
+library(phyloseq)
+library(metagMisc)
+library(dplyr)
+library(egor)
+library(ggpubr)
+library(gtools)
+library(mrdwabmisc)
+setwd("D:/Boulot-Leuven/UNESCO_eDNA/1rst_batch/rarefaction_curves")
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Argentina sample
+
+```{r Argentina}
+Arg <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_Argentina_MiFish_2.rds")
+Arg <- tax_glom(Arg, taxrank = rank_names(Arg)[15])
+Arg
+iNEXT_table <- otu_table(Arg) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Arg <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#4e693a","#88b564","#4e693a","#4e693a","#4e693a","#9bcf72",
+             "#749b55","#9bcf72","#749b55","#749b55","#749b55","#9bcf72",
+             "#ade880","gray34","#88b564","#ade880","#88b564","#88b564",
+             "#9bcf72","#ade880","#ade880","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Arg, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Arg, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Arg, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2)
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Bangladesh sample
+
+```{r Bangladesh}
+Ban <- readRDS("phyloseq_Bangladesh_MiFish.rds")
+Ban2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_Bangladesh_MiFish_2.rds")
+OTU_Ban2 <- as(otu_table(Ban2), "matrix")
+OTU_Ban <- as(otu_table(Ban), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Ban2), as.data.frame(OTU_Ban))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Ban2 <- as(tax_table(Ban2), "matrix")
+TAXA_Ban <- as(tax_table(Ban), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Ban2), as.data.frame(TAXA_Ban))
+TAXA_all <- tax_table(TAXA_all)
+Ban_all <- phyloseq(OTU_all, TAXA_all)
+Ban_all <- tax_glom(Ban_all, taxrank = rank_names(Ban_all)[15])
+Ban_all
+iNEXT_table <- otu_table(Ban_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Ban <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#407d55","#53a36f","#67c989","#67c989","#2d573c","#407d55",
+             "#53a36f","#53a36f","#67c989","#2d573c","#2d573c","#53a36f",
+             "#7af0a3","#7af0a3","#407d55","#2d573c","#7af0a3","#7af0a3",
+             "#67c989","#193021","#407d55","grey34")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Ban, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Ban, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Ban, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Belize sample
+
+```{r Belize}
+Bel <- readRDS("phyloseq_Belize_MiFish.rds")
+Bel2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_Belize_MiFish_2.rds")
+OTU_Bel2 <- as(otu_table(Bel2), "matrix")
+OTU_Bel <- as(otu_table(Bel), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Bel2), as.data.frame(OTU_Bel))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Bel2 <- as(tax_table(Bel2), "matrix")
+TAXA_Bel <- as(tax_table(Bel), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Bel2), as.data.frame(TAXA_Bel))
+TAXA_all <- tax_table(TAXA_all)
+Bel_all <- phyloseq(OTU_all, TAXA_all)
+Bel_all <- tax_glom(Bel_all, taxrank = rank_names(Bel_all)[15])
+Bel_all
+iNEXT_table <- otu_table(Bel_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Bel <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#373461","#373461","#4c4987","#21203b","#4c4987","#21203b",
+             "#373461","grey34","#21203b","#625ead","#4c4987","#4c4987",
+             "#625ead","#21203b","#625ead","#373461","#625ead","#7570d1")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Bel, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Bel, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Bel, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Brazil sample
+
+```{r Brazil}
+Bra <- readRDS("phyloseq_Brazil_MiFish.rds")
+Bra2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_Brazil_MiFish_2.rds")
+OTU_Bra2 <- as(otu_table(Bra2), "matrix")
+OTU_Bra <- as(otu_table(Bra), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Bra2), as.data.frame(OTU_Bra))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Bra2 <- as(tax_table(Bra2), "matrix")
+TAXA_Bra <- as(tax_table(Bra), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Bra2), as.data.frame(TAXA_Bra))
+TAXA_all <- tax_table(TAXA_all)
+Bra_all <- phyloseq(OTU_all, TAXA_all)
+Bra_all <- tax_glom(Bra_all, taxrank = rank_names(Bra_all)[15])
+Bra_all
+iNEXT_table <- otu_table(Bra_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Bra <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#787424","#aba433","#aba433","#aba433","#aba433","#454215",
+             "#787424","gray34","#454215","#787424","#454215","#454215",
+             "#787424","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Bra, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Bra, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Bra, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for CocosIsland sample
+
+```{r CocosIsland}
+Coco <- readRDS("phyloseq_CocosIsland_MiFish.rds")
+Coco2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_CocosIsland_MiFish_2.rds")
+OTU_Coco2 = as(otu_table(Coco2), "matrix")
+OTU_Coco = as(otu_table(Coco), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Coco2), as.data.frame(OTU_Coco))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Coco2 <- as(tax_table(Coco2), "matrix")
+TAXA_Coco = as(tax_table(Coco), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Coco2), as.data.frame(TAXA_Coco))
+TAXA_all <- tax_table(TAXA_all)
+Sample_Coco2 <- as(sample_data(Coco2), "matrix")
+Sample_Coco <- as(sample_data(Coco), "matrix")
+temp1 <- list(as.data.frame(Sample_Coco2), as.data.frame(Sample_Coco))
+Sample_all <- RBIND(temp1, keep.rownames = TRUE)
+Coco_all <- phyloseq(OTU_all, TAXA_all)
+Coco_all <- tax_glom(Coco_all, taxrank = rank_names(Coco_all)[15])
+Coco_all
+iNEXT_table <- otu_table(Coco_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Coco <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#372038","#b669b8","#9c5a9e","#b669b8","#e786eb","#834c85",
+             "#372038","#834c85","#834c85","#e786eb","#372038","#ce77d1",
+             "#ce77d1","#ce77d1","#ce77d1","#372038","#9c5a9e","#9c5a9e",
+             "#b669b8","#b669b8","#834c85","#e786eb","#834c85","#b669b8",
+             "#834c85","#e786eb","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Coco, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Coco, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Coco, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Coiba sample
+
+```{r Coiba}
+Coi <- readRDS("phyloseq_Coiba_MiFish.rds")
+Coi2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_Coiba_MiFish_2.rds")
+OTU_Coi2 <- as(otu_table(Coi2), "matrix")
+OTU_Coi <- as(otu_table(Coi), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Coi2), as.data.frame(OTU_Coi))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Coi2 <- as(tax_table(Coi2), "matrix")
+TAXA_Coi <- as(tax_table(Coi), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Coi2), as.data.frame(TAXA_Coi))
+TAXA_all <- tax_table(TAXA_all)
+Coi_all <- phyloseq(OTU_all, TAXA_all)
+Coi_all <- tax_glom(Coi_all, taxrank = rank_names(Coi_all)[15])
+Coi_all
+iNEXT_table <- otu_table(Coi_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Coi <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#4dd4d6","#246263","#5bf9fc","#3fadaf","#4dd4d6","#3fadaf",
+                      "#4dd4d6","#4dd4d6","#5bf9fc","#32888a","#32888a",
+                      "#5bf9fc","#246263","#3fadaf","#3fadaf","#246263",
+                      "#32888a","#5bf9fc","#163d3d","#32888a","#246263",
+                      "gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Coi, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Coi, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Coi, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Everglades sample
+
+```{r Everglades}
+Eve <- readRDS("phyloseq_Everglades_MiFish.rds")
+Eve2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_Everglades_MiFish_2.rds")
+OTU_Eve2 <- as(otu_table(Eve2), "matrix")
+OTU_Eve <- as(otu_table(Eve), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Eve2), as.data.frame(OTU_Eve))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Eve2 <- as(tax_table(Eve2), "matrix")
+TAXA_Eve <- as(tax_table(Eve), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Eve2), as.data.frame(TAXA_Eve))
+TAXA_all <- tax_table(TAXA_all)
+Eve_all <- phyloseq(OTU_all, TAXA_all)
+Eve_all <- tax_glom(Eve_all, taxrank = rank_names(Eve_all)[15])
+Eve_all
+iNEXT_table <- otu_table(Eve_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Eve <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#c86145","#7a3b2a","#7a3b2a","#7a3b2a","#c86145","#ed7351",
+                      "#7a3b2a","#a14e37","#a14e37","#a14e37","gray34",
+                      "#ed7351","#54291d","#a14e37","#c86145","#c86145",
+                      "#ed7351","#7a3b2a","#ed7351","#54291d","#54291d",
+                      "#54291d","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Eve, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Eve, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Eve, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for LordHowe sample
+
+```{r LordHowe}
+Lor <- readRDS("phyloseq_LordHowe_MiFish.rds")
+Lor2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_LordHowe_MiFish_2.rds")
+OTU_Lor2 <- as(otu_table(Lor2), "matrix")
+OTU_Lor <- as(otu_table(Lor), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Lor2), as.data.frame(OTU_Lor))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Lor2 <- as(tax_table(Lor2), "matrix")
+TAXA_Lor <- as(tax_table(Lor), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Lor2), as.data.frame(TAXA_Lor))
+TAXA_all <- tax_table(TAXA_all)
+Lor_all <- phyloseq(OTU_all, TAXA_all)
+Lor_all <- tax_glom(Lor_all, taxrank = rank_names(Lor_all)[15])
+Lor_all
+iNEXT_table <- otu_table(Lor_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Lor <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#542636","#7a374f","#7a374f","#c75980","#ed6b98","#ed6b98",
+                      "#542636","#a14867","#a14867","#a14867","#a14867",
+                      "#542636","#c75980","#c75980","#c75980","#7a374f",
+                      "#7a374f","#ed6b98","gray34","#542636","#ed6b98","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Lor, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Lor, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Lor, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Mauritania sample
+
+```{r Mauritania}
+Mau <- readRDS("phyloseq_Mauritania_MiFish.rds")
+Mau2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_Mauritania_MiFish_2.rds")
+OTU_Mau2 <- as(otu_table(Mau2), "matrix")
+OTU_Mau <- as(otu_table(Mau), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Mau2), as.data.frame(OTU_Mau))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Mau2 <- as(tax_table(Mau2), "matrix")
+TAXA_Mau <- as(tax_table(Mau), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Mau2), as.data.frame(TAXA_Mau))
+TAXA_all <- tax_table(TAXA_all)
+Mau_all <- phyloseq(OTU_all, TAXA_all)
+Mau_all <- tax_glom(Mau_all, taxrank = rank_names(Mau_all)[15])
+Mau_all
+iNEXT_table <- otu_table(Mau_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Mau <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#cf832d","#cf832d","#cf832d","#cf832d","#cf832d","#cf832d",
+                      "#cf832d","#cf832d","#cf832d","#cf832d","#cf832d",
+                      "gray34","#cf832d","#cf832d","#cf832d","#cf832d",
+                      "#cf832d","#cf832d","#cf832d","#cf832d","#cf832d",
+                      "#cf832d")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Mau, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Mau, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Mau, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Mexico sample
+
+```{r Mexico}
+Mex <- readRDS("phyloseq_Mexico_MiFish.rds")
+Mex2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_Mexico_MiFish_2.rds")
+OTU_Mex2 <- as(otu_table(Mex2), "matrix")
+OTU_Mex <- as(otu_table(Mex), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Mex2), as.data.frame(OTU_Mex))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Mex2 <- as(tax_table(Mex2), "matrix")
+TAXA_Mex <- as(tax_table(Mex), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Mex2), as.data.frame(TAXA_Mex))
+TAXA_all <- tax_table(TAXA_all)
+Mex_all <- phyloseq(OTU_all, TAXA_all)
+Mex_all <- tax_glom(Mex_all, taxrank = rank_names(Mex_all)[15])
+Mex_all
+iNEXT_table <- otu_table(Mex_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Mex <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#83b3fc","gray34","#344763","#698fca","#344763","#83b3fc",
+                      "#83b3fc","#4e6b96","#83b3fc","#344763","#4e6b96",
+                      "gray34","#698fca","#698fca","#344763","#83b3fc",
+                      "#83b3fc","#4e6b96","#83b3fc","#698fca","#4e6b96",
+                      "#83b3fc")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Mex, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Mex, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Mex, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for NewCaledonia sample
+
+```{r NewCaledonia}
+New <- readRDS("phyloseq_NewCaledonia_MiFish.rds")
+New2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_NewCaledonia_MiFish_2.rds")
+OTU_New2 <- as(otu_table(New2), "matrix")
+OTU_New <- as(otu_table(New), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_New2), as.data.frame(OTU_New))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_New2 <- as(tax_table(New2), "matrix")
+TAXA_New <- as(tax_table(New), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_New2), as.data.frame(TAXA_New))
+TAXA_all <- tax_table(TAXA_all)
+New_all <- phyloseq(OTU_all, TAXA_all)
+New_all <- tax_glom(New_all, taxrank = rank_names(New_all)[15])
+New_all
+iNEXT_table <- otu_table(New_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_New <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#94ae35","#b4d43f","#d4fa4b","#94ae35","#738729","#52611d",
+             "#738729","#b4d43f","#94ae35","#d4fa4b","gray34","#d4fa4b",
+             "#52611d","#b4d43f","#52611d","#94ae35","#738729","#738729",
+             "#52611d","#d4fa4b")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_New, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_New, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_New, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Ningaloo sample
+
+```{r Ningaloo}
+Nin <- readRDS("phyloseq_Ningaloo_MiFish.rds")
+Nin2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_Ningaloo_MiFish_2.rds")
+OTU_Nin2 <- as(otu_table(Nin2), "matrix")
+OTU_Nin <- as(otu_table(Nin), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Nin2), as.data.frame(OTU_Nin))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Nin2 <- as(tax_table(Nin2), "matrix")
+TAXA_Nin <- as(tax_table(Nin), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Nin2), as.data.frame(TAXA_Nin))
+TAXA_all <- tax_table(TAXA_all)
+Nin_all <- phyloseq(OTU_all, TAXA_all)
+Nin_all <- tax_glom(Nin_all, taxrank = rank_names(Nin_all)[15])
+Nin_all
+iNEXT_table <- otu_table(Nin_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Nin <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#bf81e3","#9f6cbd","#bf81e3","#7f5696","#3f2a4a","#9f6cbd",
+             "#5f4070","#5f4070","#5f4070","#7f5696","#bf81e3","gray34",
+             "#9f6cbd","#7f5696","#7f5696","#3f2a4a","gray34","#9f6cbd",
+             "#3f2a4a","#bf81e3","#3f2a4a","#3f2a4a")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Nin, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Nin, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Nin, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Philippines sample
+
+```{r Philippines}
+Phi <- readRDS("phyloseq_Philippines_MiFish.rds")
+Phi2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_Philippines_MiFish_2.rds")
+OTU_Phi2 <- as(otu_table(Phi2), "matrix")
+OTU_Phi <- as(otu_table(Phi), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Phi2), as.data.frame(OTU_Phi))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Phi2 <- as(tax_table(Phi2), "matrix")
+TAXA_Phi <- as(tax_table(Phi), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Phi2), as.data.frame(TAXA_Phi))
+TAXA_all <- tax_table(TAXA_all)
+Phi_all <- phyloseq(OTU_all, TAXA_all)
+Phi_all <- tax_glom(Phi_all, taxrank = rank_names(Phi_all)[15])
+Phi_all
+iNEXT_table <- otu_table(Phi_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Phi <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#614416","#875f1f","gray34","#614416","#ad7a28","#3b290d",
+             "#fab039","#614416","#ad7a28","#ad7a28","#875f1f","#875f1f",
+             "#d39531","#d39531","#d39531","#875f1f","#ad7a28","#fab039",
+             "#3b290d","#d39531","#614416","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Phi, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Phi, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Phi, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Scandola sample
+
+```{r Scandola}
+Sca <- readRDS("phyloseq_Scandola_MiFish.rds")
+Sca2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_Scandola_MiFish_2.rds")
+OTU_Sca2 <- as(otu_table(Sca2), "matrix")
+OTU_Sca <- as(otu_table(Sca), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Sca2), as.data.frame(OTU_Sca))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Sca2 <- as(tax_table(Sca2), "matrix")
+TAXA_Sca <- as(tax_table(Sca), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Sca2), as.data.frame(TAXA_Sca))
+TAXA_all <- tax_table(TAXA_all)
+Sca_all <- phyloseq(OTU_all, TAXA_all)
+Sca_all <- tax_glom(Sca_all, taxrank = rank_names(Sca_all)[15])
+Sca_all
+iNEXT_table <- otu_table(Sca_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Sca <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#f26333","#f26333","#f26333","#f26333","#cc532b","#cc532b","#cc532b",
+                  "#cc532b","#a64423","#a64423","#a64423","#a64423","#80341b",
+                  "#80341b","#80341b","#80341b","#80341b","#592513","#33150b")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Sca, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Sca, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Sca, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Seychellen sample
+
+```{r Seychellen}
+Sey <- readRDS("phyloseq_Seychellen_MiFish.rds")
+Sey2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_Seychellen_MiFish_2.rds")
+OTU_Sey2 <- as(otu_table(Sey2), "matrix")
+OTU_Sey <- as(otu_table(Sey), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Sey2), as.data.frame(OTU_Sey))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Sey2 <- as(tax_table(Sey2), "matrix")
+TAXA_Sey <- as(tax_table(Sey), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Sey2), as.data.frame(TAXA_Sey))
+TAXA_all <- tax_table(TAXA_all)
+Sey_all <- phyloseq(OTU_all, TAXA_all)
+Sey_all <- tax_glom(Sey_all, taxrank = rank_names(Sey_all)[15])
+Sey_all
+iNEXT_table <- otu_table(Sey_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Sey <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#fc4e68","#fc4e68","#fc4e68","#d64259","#d64259","#d64259","#d64259",
+                  "#b03749","#b03749","#b03749","#b03749","#8a2b39","#8a2b39",
+                  "#8a2b39","#8a2b39","#631f29","#631f29","#631f29","#631f29")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Sey, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Sey, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Sey, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for SharkBay sample
+
+```{r SharkBay}
+Sha <- readRDS("phyloseq_SharkBay_MiFish.rds")
+Sha2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_SharkBay_MiFish_2.rds")
+OTU_Sha2 <- as(otu_table(Sha2), "matrix")
+OTU_Sha <- as(otu_table(Sha), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Sha2), as.data.frame(OTU_Sha))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Sha2 <- as(tax_table(Sha2), "matrix")
+TAXA_Sha <- as(tax_table(Sha), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Sha2), as.data.frame(TAXA_Sha))
+TAXA_all <- tax_table(TAXA_all)
+Sha_all <- phyloseq(OTU_all, TAXA_all)
+Sha_all <- tax_glom(Sha_all, taxrank = rank_names(Sha_all)[15])
+Sha_all
+iNEXT_table <- otu_table(Sha_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Sha <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#e693ce","#e693ce","#e693ce","#e693ce","#bf7aac","#bf7aac","#bf7aac",
+                  "#bf7aac","#bf7aac","#996289","#996289","#996289","#734967",
+                  "#734967","#734967","#734967","#33202e","#33202e","#33202e",
+                  "#33202e")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Sha, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Sha, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Sha, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for SouthAfrica sample
+
+```{r SouthAfrica}
+SoA <- readRDS("phyloseq_SouthAfrica_MiFish.rds")
+SoA2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_SouthAfrica_MiFish_2.rds")
+OTU_SoA2 <- as(otu_table(SoA2), "matrix")
+OTU_SoA <- as(otu_table(SoA), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_SoA2), as.data.frame(OTU_SoA))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_SoA2 <- as(tax_table(SoA2), "matrix")
+TAXA_SoA <- as(tax_table(SoA), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_SoA2), as.data.frame(TAXA_SoA))
+TAXA_all <- tax_table(TAXA_all)
+SoA_all <- phyloseq(OTU_all, TAXA_all)
+SoA_all <- tax_glom(SoA_all, taxrank = rank_names(SoA_all)[15])
+SoA_all
+iNEXT_table <- otu_table(SoA_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_SoA <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#607fe6","#607fe6","#607fe6","#607fe6","#5b78d9","#5b78d9","#5b78d9",
+                  "#5b78d9","#5b78d9","#4b63b3","#4b63b3","#4b63b3","#4b63b3",
+                  "#3b4e8c","#3b4e8c","#3b4e8c","#3b4e8c","#2b3966","#2b3966",
+                  "#2b3966","#2b3966")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_SoA, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_SoA, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_SoA, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for SouthernOcean sample
+
+```{r SouthernOcean}
+SoO <- readRDS("phyloseq_SouthernOcean_MiFish.rds")
+SoO2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_SouthernOcean_MiFish_2.rds")
+OTU_SoO2 <- as(otu_table(SoO2), "matrix")
+OTU_SoO <- as(otu_table(SoO), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_SoO2), as.data.frame(OTU_SoO))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_SoO2 <- as(tax_table(SoO2), "matrix")
+TAXA_SoO <- as(tax_table(SoO), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_SoO2), as.data.frame(TAXA_SoO))
+TAXA_all <- tax_table(TAXA_all)
+SoO_all <- phyloseq(OTU_all, TAXA_all)
+SoO_all <- tax_glom(SoO_all, taxrank = rank_names(SoO_all)[15])
+SoO_all
+iNEXT_table <- otu_table(SoO_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_SoO <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#52faf4","#52faf4","#52faf4","#52faf4","#52faf4","#42c7c2","#42c7c2",
+                  "#42c7c2","#42c7c2","#319491","#319491","#319491","#319491",
+                  "#20615f","#20615f","#20615f","#20615f","#20615f","#0f2e2d",
+                  "#0f2e2d","#0f2e2d","#0f2e2d")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_SoO, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_SoO, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_SoO, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Wadden sample
+
+```{r Wadden}
+Wad <- readRDS("phyloseq_Wadden_MiFish.rds")
+Wad2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_Wadden_MiFish_2.rds")
+Wad3 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_WaddenB_MiFish_2.rds")
+OTU_Wad2 <- as(otu_table(Wad2), "matrix")
+OTU_Wad <- as(otu_table(Wad), "matrix")
+OTU_Wad3 <- as(otu_table(Wad3), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Wad2), as.data.frame(OTU_Wad), as.data.frame(OTU_Wad3))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Wad2 <- as(tax_table(Wad2), "matrix")
+TAXA_Wad <- as(tax_table(Wad), "matrix")
+TAXA_Wad3 <- as(tax_table(Wad3), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Wad2), as.data.frame(TAXA_Wad), as.data.frame(TAXA_Wad3))
+TAXA_all <- tax_table(TAXA_all)
+Wad_all <- phyloseq(OTU_all, TAXA_all)
+Wad_all <- tax_glom(Wad_all, taxrank = rank_names(Wad_all)[15])
+Wad_all
+iNEXT_table <- otu_table(Wad_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Wad <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#73ff6e","#73ff6e","#73ff6e","#73ff6e","#73ff6e","#73ff6e","#73ff6e",
+                  "#73ff6e","#73ff6e","#61d95d","#61d95d","#61d95d","#61d95d",
+                  "#61d95d","#61d95d","#61d95d","#61d95d","#61d95d","#50b34d",
+                  "#50b34d","#50b34d","#50b34d","#50b34d","#50b34d","#50b34d",
+                  "#50b34d","#50b34d","#3f8c3c","#3f8c3c","#3f8c3c","#3f8c3c",
+                  "#2e662c","#2e662c","#2e662c","#2e662c","#2e662c","#2e662c",
+                  "#2e662c","#2e662c","#2e662c","#2e662c")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Wad, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Wad, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Wad, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Yemen sample
+
+```{r Yemen}
+Yem2 <- readRDS("../../2nd_batch/rarefaction_curves/phyloseq_Yemen_MiFish_2.rds")
+Yem2 <- tax_glom(Yem2, taxrank = rank_names(Yem2)[15])
+Yem2
+iNEXT_table <- otu_table(Yem2) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Yem <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+
+palette <- c("#030102","#ff66cc","#331429","#cc52a3","#ff66cc","#662952",
+             "#993d7a","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+p1 <- ggiNEXT(iNEXT_data_Yem, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Sample completeness curve
+p2 <- ggiNEXT(iNEXT_data_Yem, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+# Coverage-based rarefaction/extrapolation curve
+p3 <- ggiNEXT(iNEXT_data_Yem, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+
+```
