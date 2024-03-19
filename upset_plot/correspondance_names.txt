@@ -1,0 +1,28 @@
+results	station_file
+Seychellen	Aldabra Atoll
+Mexico	Archipélago de Revillagigedo
+Mauritania	Banc d'Arguin National Park
+Belize	Belize Barrier Reef Reserve System
+Brazil	Brazilian Atlantic Islands
+CocosIsland	Cocos Island National Park
+Coiba	Coiba National Park
+Everglades	Everglades National Park
+SouthernOcean	French Austral Lands and Seas
+Scandola	Scandola Reserve
+NewCaledonia	Lagoons of New Caledonia
+LordHowe	Lord Howe Island Group
+Ningaloo	Ningaloo Coast
+Argentina	Peninsula Valdès
+	Sanganeb Marine National Park
+SharkBay	Shark Bay
+Yemen	Socotra Archipelago
+Bangladesh	The Sundarbans
+Philippines	Tubbataha Reefs Natural Park
+Wadden	Wadden Sea
+SouthAfrica	iSimangaliso Wetland Park
+
+
+
+
+
+
