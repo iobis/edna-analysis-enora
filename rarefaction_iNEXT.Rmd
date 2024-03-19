@@ -1,5 +1,5 @@
 ---
-title: "Rarefaction curves of the 1rst batch for MiFish amplicon"
+title: "Rarefaction curves for MiFish amplicon"
 author: "Enora Geslain"
 date: "`r Sys.Date()`"
 output:
