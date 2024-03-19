@@ -1,0 +1,524 @@
+---
+title: "Venn diagrams comparing genus shared between different filters and stations for CocosIsland site"
+author: "Enora Geslain"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    number_sections: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(venn)
+library(UpSetR)
+setwd("D:/Boulot-Leuven/UNESCO_eDNA/venn_diagrams")
+```
+
+
+```{r make_matrix_function}
+Make_matrix_plot <- function(Mat_data,Set_size_data, Main_bar_data, point_size, line_size, text_scale, labels,
+                             shading_data, shade_alpha){
+
+  if(length(text_scale) == 1){
+    name_size_scale <- text_scale
+  }
+  if(length(text_scale) > 1 && length(text_scale) <= 6){
+    name_size_scale <- text_scale[5]
+  }
+  
+  Mat_data$line_col <- 'black'
+
+  Matrix_plot <- (ggplot()
+                  + theme(panel.background = element_rect(fill = "white"),
+                          plot.margin=unit(c(-0.2,0.5,0.5,0.5), "lines"),
+                          axis.text.x = element_blank(),
+                          axis.ticks.x = element_blank(),
+                          axis.ticks.y = element_blank(),
+                          axis.text.y = element_text(colour = "gray0",
+                                                     size = 7*name_size_scale, hjust = 0.4),
+                          panel.grid.major = element_blank(),
+                          panel.grid.minor = element_blank())
+                  + xlab(NULL) + ylab("   ")
+                  + scale_y_continuous(breaks = c(1:nrow(Set_size_data)),
+                                       limits = c(0.5,(nrow(Set_size_data) +0.5)),
+                                       labels = labels, expand = c(0,0))
+                  + scale_x_continuous(limits = c(0,(nrow(Main_bar_data)+1 )), expand = c(0,0))
+                  + geom_rect(data = shading_data, aes_string(xmin = "min", xmax = "max",
+                                                              ymin = "y_min", ymax = "y_max"),
+                              fill = shading_data$shade_color, alpha = shade_alpha)
+                  + geom_line(data= Mat_data, aes_string(group = "Intersection", x="x", y="y",
+                                                         colour = "line_col"), size = line_size)
+                 + geom_point(data= Mat_data, aes_string(x= "x", y= "y"), colour = Mat_data$color,
+                     size= point_size, alpha = Mat_data$alpha, shape=16)
+                  + scale_color_identity())
+  Matrix_plot <- ggplot_gtable(ggplot_build(Matrix_plot))
+  return(Matrix_plot)
+}
+```
+
+
+```{r load_input_files}
+## Load each set
+set1 <- scan("Argentina/Argentina_valdes_station_1.txt", "")
+set2 <- scan("Argentina/Argentina_valdes_station_2.txt", "")
+set3 <- scan("Argentina/Argentina_valdes_station_3.txt", "")
+set4 <- scan("Argentina/Argentina_valdes_station_4.txt", "")
+set5 <- scan("Argentina/Argentina_valdes_station_5.txt", "")
+set6 <- scan("Belize/Belize_bacalar_chico.txt", "")
+set7 <- scan("Belize/Belize_bcmr.txt", "")
+set8 <- scan("Belize/Belize_glovers_reef.txt", "")
+set9 <- scan("Belize/Belize_scmr.txt", "")
+set10 <- scan("Belize/Belize_swcmr.txt", "")
+set11 <- scan("Brazil/Brazil_baia_dos_delfines.txt", "")
+set12 <- scan("Brazil/Brazil_cagarras.txt", "")
+set13 <- scan("Brazil/Brazil_sueste.txt", "")
+set14 <- scan("CocosIsland/CocosIsland_dos_amigos.txt", "")
+set15 <- scan("CocosIsland/CocosIsland_juan_bautista.txt", "")
+set16 <- scan("CocosIsland/CocosIsland_manuelita.txt", "")
+set17 <- scan("CocosIsland/CocosIsland_montagne.txt", "")
+set18 <- scan("CocosIsland/CocosIsland_pni.txt", "")
+set19 <- scan("CocosIsland/CocosIsland_roca.txt", "")
+set20 <- scan("CocosIsland/CocosIsland_roca_sucia.txt", "")
+set21 <- scan("CocosIsland/CocosIsland_sucia.txt", "")
+set22 <- scan("CocosIsland/CocosIsland_taza_de_te.txt", "")
+set23 <- scan("Coiba/Coiba_canales_de_afuero.txt", "")
+set24 <- scan("Coiba/Coiba_granito_de_oro.txt", "")
+set25 <- scan("Coiba/Coiba_isla_tortuga.txt", "")
+set26 <- scan("Coiba/Coiba_oceanica.txt", "")
+set27 <- scan("Coiba/Coiba_rio_san_juan.txt", "")
+set28 <- scan("Coiba/Coiba_tres_islas.txt", "")
+set29 <- scan("Everglades/Everglades_captain.txt", "")
+set30 <- scan("Everglades/Everglades_crocodile_dragover.txt", "")
+set31 <- scan("Everglades/Everglades_north_eagle_key.txt", "")
+set32 <- scan("Everglades/Everglades_trout_creek.txt", "")
+set33 <- scan("Everglades/Everglades_whip_ray.txt", "")
+set34 <- scan("LordHowe/LordHowe_comets_hole.txt", "")
+set35 <- scan("LordHowe/LordHowe_erscotts_hole.txt", "")
+set36 <- scan("LordHowe/LordHowe_far_rocks.txt", "")
+set37 <- scan("LordHowe/LordHowe_north_bay.txt", "")
+set38 <- scan("LordHowe/LordHowe_sylphs_hole.txt", "")
+set39 <- scan("Mauritania/Mauritania_pnba.txt", "")
+set40 <- scan("Mexico/Mexico_isla_clarion.txt", "")
+set41 <- scan("Mexico/Mexico_punta_tosca.txt", "")
+set42 <- scan("Mexico/Mexico_roca_partida.txt", "")
+set43 <- scan("Mexico/Mexico_san_benedicto.txt", "")
+set44 <- scan("NewCaledonia/NewCaledonia_entrecasteaux.txt", "")
+set45 <- scan("NewCaledonia/NewCaledonia_grand_lagoon_nord.txt", "")
+set46 <- scan("NewCaledonia/NewCaledonia_kouare.txt", "")
+set47 <- scan("NewCaledonia/NewCaledonia_poe_zco.txt", "")
+set48 <- scan("NewCaledonia/NewCaledonia_pouebo.txt", "")
+set49 <- scan("Ningaloo/Ningaloo_bundegi_beach.txt", "")
+set50 <- scan("Ningaloo/Ningaloo_jurabi_coastal_park.txt", "")
+set51 <- scan("Ningaloo/Ningaloo_mangrove_bay.txt", "")
+set52 <- scan("Ningaloo/Ningaloo_osprey_bay.txt", "")
+set53 <- scan("Ningaloo/Ningaloo_oyster_stacks.txt", "")
+set54 <- scan("Philippines/Philippines_kook_south_atoll.txt", "")
+set55 <- scan("Philippines/Philippines_new_bird_islet.txt", "")
+set56 <- scan("Philippines/Philippines_north_east_malayan_reef.txt", "")
+set57 <- scan("Philippines/Philippines_south_atoll_lagoon.txt", "")
+set58 <- scan("Philippines/Philippines_south_park.txt", "")
+set59 <- scan("Philippines/Philippines_twreck_south_atoll.txt", "")
+set60 <- scan("Seychellen/Seychellen_bras_monsieur_claremont.txt", "")
+set61 <- scan("Seychellen/Seychellen_ile_esprit.txt", "")
+set62 <- scan("Seychellen/Seychellen_polymnie.txt", "")
+set63 <- scan("Seychellen/Seychellen_settlement_beach.txt", "")
+set64 <- scan("Seychellen/Seychellen_west_grand_terre.txt", "")
+set65 <- scan("SouthAfrica/SouthAfrica_bhanga_neck.txt", "")
+set66 <- scan("SouthAfrica/SouthAfrica_ingwe_beach.txt", "")
+set67 <- scan("SouthAfrica/SouthAfrica_mission_rock.txt", "")
+set68 <- scan("SouthAfrica/SouthAfrica_sodwana_bay.txt", "")
+set69 <- scan("SouthAfrica/SouthAfrica_st_lucia_lake.txt", "")
+set70 <- scan("SouthernOcean/SouthernOcean_amsterdam.txt", "")
+set71 <- scan("SouthernOcean/SouthernOcean_armor.txt", "")
+set72 <- scan("SouthernOcean/SouthernOcean_baie_des_swains.txt", "")
+set73 <- scan("SouthernOcean/SouthernOcean_ile_haute.txt", "")
+set74 <- scan("SouthernOcean/SouthernOcean_suhm.txt", "")
+set75 <- scan("Yemen/Yemen_di_hamri.txt", "")
+set76 <- scan("Yemen/Yemen_ditwh_pa.txt", "")
+set77 <- scan("Yemen/Yemen_mahfarhin_qasharihan_mpa.txt", "")
+set78 <- scan("Yemen/Yemen_qariah.txt", "")
+set79 <- scan("Yemen/Yemen_roosh_mpa.txt", "")
+set80 <- scan("Yemen/Yemen_shoeb_lagoon.txt", "")
+set81 <- scan("Wadden/Wadden_den_oever.txt", "")
+set82 <- scan("Wadden/Wadden_hjerting.txt", "")
+set83 <- scan("Wadden/Wadden_neuwerk.txt", "")
+set84 <- scan("Wadden/Wadden_schleswig_holstein.txt", "")
+set85 <- scan("Wadden/Wadden_wilhelmshaven.txt", "")
+set86 <- scan("Scandola/Scandola_elbu.txt", "")
+set87 <- scan("Scandola/Scandola_ficaccia.txt", "")
+set88 <- scan("Scandola/Scandola_ficaghjola.txt", "")
+set89 <- scan("Scandola/Scandola_foccocara.txt", "")
+set90 <- scan("Scandola/Scandola_punta_a_scopa.txt", "")
+set91 <- scan("Scandola/Scandola_ruzaghiu.txt", "")
+set92 <- scan("SharkBay/SharkBay_debault_creek.txt", "")
+set93 <- scan("SharkBay/SharkBay_fowlers_camp.txt", "")
+set94 <- scan("SharkBay/SharkBay_monkey_mia.txt", "")
+set95 <- scan("SharkBay/SharkBay_petit_point.txt", "")
+set96 <- scan("SharkBay/SharkBay_sandy_bay.txt", "")
+set97 <- scan("Bangladesh/Bangladesh_sundarbans_1.txt", "")
+set98 <- scan("Bangladesh/Bangladesh_sundarbans_2.txt", "")
+set99 <- scan("Bangladesh/Bangladesh_sundarbans_3.txt", "")
+set100 <- scan("Bangladesh/Bangladesh_sundarbans_4.txt", "")
+set101 <- scan("Bangladesh/Bangladesh_sundarbans_5.txt", "")
+set102 <- scan("Bangladesh/Bangladesh_sundarbans_6.txt", "")
+
+## Create list containing all sets
+x <- list(valdes_station_1=set1, valdes_station_2=set2, valdes_station_3=set3,
+          valdes_station_4=set4, valdes_station_5=set5, bacalar_chico=set6,
+          bcmr=set7, glovers_reef=set8, scmr=set9, swcmr=set10,
+          baia_dos_delfines=set11, cagarras=set12, sueste=set13,
+          dos_amigos=set14, juan_bautista=set15, manuelita=set16,
+          montagne=set17, pni=set18, roca=set19, roca_sucia=set20, sucia=set21,
+          taza_de_te=set22, canales_de_afuero=set23, granito_de_oro=set24,
+          isla_tortuga=set25, oceanica=set26, rio_san_juan=set27,
+          tres_islas=set28, captain=set29, crocodile_dragover=set30,
+          north_eagle_key=set31, trout_creek=set32, whip_ray=set33,
+          comets_hole=set34, erscotts_hole=set35, far_rocks=set36,
+          north_bay=set37, sylphs_hole=set38, pnba=set39, isla_clarion=set40,
+          punta_tosca=set41, roca_partida=set42, san_benedicto=set43,
+          entrecasteaux=set44, grand_lagoon_nord=set45, kouare=set46,
+          poe_zco=set47, pouebo=set48, bundegi_beach=set49,
+          jurabi_coastal_park=set50, mangrove_bay=set51, osprey_bay=set52,
+          oyster_stacks=set53, kook_south_atoll=set54, new_bird_islet=set55,
+          north_east_malayan_reef=set56, south_atoll_lagoon=set57,
+          south_park=set58, twreck_south_atoll=set59,
+          bras_monsieur_claremont=set60, ile_esprit=set61, polymnie=set62,
+          settlement_beach=set63, west_grand_terre=set64, bhanga_neck=set65,
+          ingwe_beach=set66, mission_rock=set67, sodwana_bay=set68,
+          st_lucia_lake=set69, amsterdam=set70, armor=set71,
+          baie_des_swains=set72,ile_haute=set73, suhm=set74, di_hamri=set75,
+          ditwh_pa=set76, mahfarhin_qasharihan_mpa=set77, qariah=set78,
+          roosh_mpa=set79, shoeb_lagoon=set80, den_oever=set81, hjerting=set82,
+          neuwerk=set83, schleswig_holstein=set84, wilhelmshaven=set85,
+          elbu=set86, ficaccia=set87, ficaghjola=set88, foccocara=set89,
+          punta_a_scopa=set90, ruzaghiu=set91, debault_creek=set92,
+          fowlers_camp=set93, monkey_mia=set94, petit_point=set95,
+          sandy_bay=set96, sundarbans_1=set97, sundarbans_2=set98,
+          sundarbans_3=set99, sundarbans_4=set100, sundarbans_5=set101,
+          sundarbans_6=set102)
+
+## Convert imput file to the right format
+genus <- fromList(x)
+```
+
+
+```{r default_upset_parameters}
+## Default upset() arguments
+nsets = 102;
+nintersects = NA;
+keep.order = T; set.metadata = NULL; intersections = NULL;
+matrix.color = "gray23"; main.bar.color = "gray23"; mainbar.y.max = NULL;
+point.size = 2.2; line.size = 0.7;
+mb.ratio = c(0.70,0.30); expression = NULL; att.pos = NULL; att.color = main.bar.color;
+decreasing = T; show.numbers = "yes"; number.angles = 0; group.by = "degree";cutoff = NULL;
+queries = NULL; query.legend = "none"; shade.color = "gray88"; shade.alpha = 0.25; matrix.dot.alpha =0.5;
+empty.intersections = NULL; color.pal = 1; boxplot.summary = NULL; attribute.plots = NULL; scale.intersections = "identity";
+set_size.angles = 0 ; set_size.show = FALSE;
+set_size.number_size = NULL;
+set_size.scale_max = NULL
+```
+
+
+```{r define_parameters}
+## comma -> semicolon
+data = genus;
+sets = c("valdes_station_1", "valdes_station_2", "valdes_station_3",
+          "valdes_station_4", "valdes_station_5", "bacalar_chico", "bcmr",
+          "glovers_reef", "scmr", "swcmr", "baia_dos_delfines", "cagarras",
+          "sueste", "dos_amigos", "juan_bautista", "manuelita", "montagne",
+          "pni", "roca", "roca_sucia", "sucia", "taza_de_te",
+          "canales_de_afuero", "granito_de_oro", "isla_tortuga", "oceanica",
+          "rio_san_juan", "tres_islas", "captain", "crocodile_dragover",
+          "north_eagle_key", "trout_creek", "whip_ray", "comets_hole",
+          "erscotts_hole", "far_rocks", "north_bay", "sylphs_hole", "pnba",
+          "isla_clarion", "punta_tosca", "roca_partida", "san_benedicto",
+          "entrecasteaux", "grand_lagoon_nord", "kouare", "poe_zco",
+          "pouebo", "bundegi_beach", "jurabi_coastal_park", "mangrove_bay",
+          "osprey_bay", "oyster_stacks", "kook_south_atoll", "new_bird_islet",
+          "north_east_malayan_reef", "south_atoll_lagoon", "south_park",
+          "twreck_south_atoll", "bras_monsieur_claremont", "ile_esprit",
+          "polymnie", "settlement_beach", "west_grand_terre", "bhanga_neck",
+          "ingwe_beach", "mission_rock", "sodwana_bay", "st_lucia_lake",
+          "amsterdam", "armor", "baie_des_swains", "ile_haute", "suhm",
+          "di_hamri", "ditwh_pa", "mahfarhin_qasharihan_mpa", "qariah",
+          "roosh_mpa", "shoeb_lagoon", "den_oever", "hjerting", "neuwerk",
+          "schleswig_holstein", "wilhelmshaven", "elbu", "ficaccia",
+          "ficaghjola", "foccocara", "punta_a_scopa", "ruzaghiu",
+          "debault_creek", "fowlers_camp", "monkey_mia", "petit_point",
+          "sandy_bay", "sundarbans_1", "sundarbans_2", "sundarbans_3",
+          "sundarbans_4", "sundarbans_5", "sundarbans_6");
+matrix.color="blue";
+point.size=5;
+mainbar.y.label = "Number of shared genus";
+sets.x.label = "Numbers of genus per station";
+scale.sets = "identity"; text.scale = c(6, 4, 6, 3, 3, 2);
+sets.bar.color=c("#4e693a","#749b55","#88b564","#9bcf72","#ade880","#7570d1",
+                   "#625ead","#4c4987","#373461","#21203b","#aba433","#787424",
+                   "#454215","#e786eb","#ce77d1","#b669b8","#9c5a9e","#834c85",
+                   "#6a3d6b","#512f52","#372038","#1e111f","#5bf9fc","#4dd4d6",
+                   "#3fadaf","#32888a","#246263","#163d3d","#ed7351","#c86145",
+                   "#a14e37","#7a3b2a","#54291d","#ed6b98","#c75980","#a14867",
+                   "#7a374f","#542636","#cf832d","#83b3fc","#698fca","#4e6b96",
+                   "#344763","#d4fa4b","#b4d43f","#94ae35","#738729","#52611d",
+                   "#bf81e3","#9f6cbd","#7f5696","#5f4070","#3f2a4a","#fab039",
+                   "#d39531","#ad7a28","#875f1f","#614416","#3b290d","#fc4e68",
+                   "#d64259","#b03749","#8a2b39","#631f29","#607fe6","#5b78d9",
+                   "#4b63b3","#3b4e8c","#2b3966","#52faf4","#42c7c2","#319491",
+                   "#20615f","#0f2e2d","#ff66cc","#cc52a3","#993d7a","#662952",
+                   "#331429","#030102","#73ff6e","#61d95d","#50b34d","#3f8c3c",
+                   "#2e662c","#f26333","#cc532b","#a64423","#80341b","#592513",
+                   "#33150b","#e693ce","#bf7aac","#996289","#734967","#33202e",
+                   "#7af0a3","#67c989","#53a36f","#407d55","#2d573c","#193021")
+```
+
+
+```{r run_upset_code}
+## Modified internal upset() code
+startend <- UpSetR:::FindStartEnd(data)
+  first.col <- startend[1]
+  last.col <- startend[2]
+
+  if(color.pal == 1){
+    palette <- c("#4e693a","#749b55","#88b564","#9bcf72","#ade880","#7570d1",
+                 "#625ead","#4c4987","#373461","#21203b","#aba433","#787424",
+                 "#454215","#e786eb","#ce77d1","#b669b8","#9c5a9e","#834c85",
+                 "#6a3d6b","#512f52","#372038","#1e111f","#5bf9fc","#4dd4d6",
+                 "#3fadaf","#32888a","#246263","#163d3d","#ed7351","#c86145",
+                 "#a14e37","#7a3b2a","#54291d","#ed6b98","#c75980","#a14867",
+                 "#7a374f","#542636","#cf832d","#83b3fc","#698fca","#4e6b96",
+                 "#344763","#d4fa4b","#b4d43f","#94ae35","#738729","#52611d",
+                 "#bf81e3","#9f6cbd","#7f5696","#5f4070","#3f2a4a","#fab039",
+                 "#d39531","#ad7a28","#875f1f","#614416","#3b290d","#fc4e68",
+                 "#d64259","#b03749","#8a2b39","#631f29","#607fe6","#5b78d9",
+                 "#4b63b3","#3b4e8c","#2b3966","#52faf4","#42c7c2","#319491",
+                 "#20615f","#0f2e2d","#ff66cc","#cc52a3","#993d7a","#662952",
+                 "#331429","#030102","#73ff6e","#61d95d","#50b34d","#3f8c3c",
+                 "#2e662c","#f26333","#cc532b","#a64423","#80341b","#592513",
+                 "#33150b","#e693ce","#bf7aac","#996289","#734967","#33202e",
+                 "#7af0a3","#67c989","#53a36f","#407d55","#2d573c","#193021")
+  } else{
+    palette <- c("#4e693a","#749b55","#88b564","#9bcf72","#ade880","#7570d1",
+                 "#625ead","#4c4987","#373461","#21203b","#aba433","#787424",
+                 "#454215","#e786eb","#ce77d1","#b669b8","#9c5a9e","#834c85",
+                 "#6a3d6b","#512f52","#372038","#1e111f","#5bf9fc","#4dd4d6",
+                 "#3fadaf","#32888a","#246263","#163d3d","#ed7351","#c86145",
+                 "#a14e37","#7a3b2a","#54291d","#ed6b98","#c75980","#a14867",
+                 "#7a374f","#542636","#cf832d","#83b3fc","#698fca","#4e6b96",
+                 "#344763","#d4fa4b","#b4d43f","#94ae35","#738729","#52611d",
+                 "#bf81e3","#9f6cbd","#7f5696","#5f4070","#3f2a4a","#fab039",
+                 "#d39531","#ad7a28","#875f1f","#614416","#3b290d","#fc4e68",
+                 "#d64259","#b03749","#8a2b39","#631f29","#607fe6","#5b78d9",
+                 "#4b63b3","#3b4e8c","#2b3966","#52faf4","#42c7c2","#319491",
+                 "#20615f","#0f2e2d","#ff66cc","#cc52a3","#993d7a","#662952",
+                 "#331429","#030102","#73ff6e","#61d95d","#50b34d","#3f8c3c",
+                 "#2e662c","#f26333","#cc532b","#a64423","#80341b","#592513",
+                 "#33150b","#e693ce","#bf7aac","#996289","#734967","#33202e",
+                 "#7af0a3","#67c989","#53a36f","#407d55","#2d573c","#193021")
+  }
+
+  if(is.null(intersections) == F){
+    Set_names <- unique((unlist(intersections)))
+    Sets_to_remove <- UpSetR:::Remove(data, first.col, last.col, Set_names)
+    New_data <- UpSetR:::Wanted(data, Sets_to_remove)
+    Num_of_set <- UpSetR:::Number_of_sets(Set_names)
+    if(keep.order == F){
+      Set_names <- UpSetR:::order_sets(New_data, Set_names)
+    }
+    All_Freqs <- UpSetR:::specific_intersections(data, first.col, last.col, intersections, order.by, group.by, decreasing,
+                                        cutoff, main.bar.color, Set_names)
+  } else if(is.null(intersections) == T){
+    Set_names <- sets
+    if(is.null(Set_names) == T || length(Set_names) == 0 ){
+      Set_names <- UpSetR:::FindMostFreq(data, first.col, last.col, nsets)
+    }
+    Sets_to_remove <- UpSetR:::Remove(data, first.col, last.col, Set_names)
+    New_data <- UpSetR:::Wanted(data, Sets_to_remove)
+    Num_of_set <- UpSetR:::Number_of_sets(Set_names)
+    if(keep.order == F){
+    Set_names <- UpSetR:::order_sets(New_data, Set_names)
+    }
+    All_Freqs <- UpSetR:::Counter(New_data, Num_of_set, first.col, Set_names, nintersects, main.bar.color,
+                         order.by, group.by, cutoff, empty.intersections, decreasing)
+  }
+  Matrix_setup <- UpSetR:::Create_matrix(All_Freqs)
+  labels <- UpSetR:::Make_labels(Matrix_setup)
+  #Chose NA to represent NULL case as result of NA being inserted when at least one contained both x and y
+  #i.e. if one custom plot had both x and y, and others had only x, the y's for the other plots were NA
+  #if I decided to make the NULL case (all x and no y, or vice versa), there would have been alot more if/else statements
+  #NA can be indexed so that we still get the non NA y aesthetics on correct plot. NULL cant be indexed.
+  att.x <- c(); att.y <- c();
+  if(is.null(attribute.plots) == F){
+    for(i in seq_along(attribute.plots$plots)){
+      if(length(attribute.plots$plots[[i]]$x) != 0){
+        att.x[i] <- attribute.plots$plots[[i]]$x
+      }
+      else if(length(attribute.plots$plots[[i]]$x) == 0){
+        att.x[i] <- NA
+      }
+      if(length(attribute.plots$plots[[i]]$y) != 0){
+        att.y[i] <- attribute.plots$plots[[i]]$y
+      }
+      else if(length(attribute.plots$plots[[i]]$y) == 0){
+        att.y[i] <- NA
+      }
+    }
+  }
+
+  BoxPlots <- NULL
+  if(is.null(boxplot.summary) == F){
+    BoxData <- UpSetR:::IntersectionBoxPlot(All_Freqs, New_data, first.col, Set_names)
+    BoxPlots <- list()
+    for(i in seq_along(boxplot.summary)){
+      BoxPlots[[i]] <- UpSetR:::BoxPlotsPlot(BoxData, boxplot.summary[i], att.color)
+    }
+  }
+
+  customAttDat <- NULL
+  customQBar <- NULL
+  Intersection <- NULL
+  Element <- NULL
+  legend <- NULL
+  EBar_data <- NULL
+  if(is.null(queries) == F){
+    custom.queries <- UpSetR:::SeperateQueries(queries, 2, palette)
+    customDat <- UpSetR:::customQueries(New_data, custom.queries, Set_names)
+    legend <- UpSetR:::GuideGenerator(queries, palette)
+    legend <- UpSetR:::Make_legend(legend)
+    if(is.null(att.x) == F && is.null(customDat) == F){
+      customAttDat <- UpSetR:::CustomAttData(customDat, Set_names)
+    }
+    customQBar <- UpSetR:::customQueriesBar(customDat, Set_names, All_Freqs, custom.queries)
+  }
+  if(is.null(queries) == F){
+    Intersection <- UpSetR:::SeperateQueries(queries, 1, palette)
+    Matrix_col <- UpSetR:::intersects(QuerieInterData, Intersection, New_data, first.col, Num_of_set,
+                             All_Freqs, expression, Set_names, palette)
+    Element <- UpSetR:::SeperateQueries(queries, 1, palette)
+    EBar_data <-UpSetR:::ElemBarDat(Element, New_data, first.col, expression, Set_names,palette, All_Freqs)
+  } else{
+    Matrix_col <- NULL
+  }
+  
+  Matrix_layout <- UpSetR:::Create_layout(Matrix_setup, matrix.color, Matrix_col, matrix.dot.alpha)
+  
+## Piece of code we introduced
+for(i in 1:102) {
+      j <- which(Matrix_layout$y == i & Matrix_layout$value == 1)
+      if(length(j) > 0) Matrix_layout$color[j] <- c("#4e693a","#749b55","#88b564","#9bcf72","#ade880","#7570d1",
+                   "#625ead","#4c4987","#373461","#21203b","#aba433","#787424",
+                   "#454215","#e786eb","#ce77d1","#b669b8","#9c5a9e","#834c85",
+                   "#6a3d6b","#512f52","#372038","#1e111f","#5bf9fc","#4dd4d6",
+                   "#3fadaf","#32888a","#246263","#163d3d","#ed7351","#c86145",
+                   "#a14e37","#7a3b2a","#54291d","#ed6b98","#c75980","#a14867",
+                   "#7a374f","#542636","#cf832d","#83b3fc","#698fca","#4e6b96",
+                   "#344763","#d4fa4b","#b4d43f","#94ae35","#738729","#52611d",
+                   "#bf81e3","#9f6cbd","#7f5696","#5f4070","#3f2a4a","#fab039",
+                   "#d39531","#ad7a28","#875f1f","#614416","#3b290d","#fc4e68",
+                   "#d64259","#b03749","#8a2b39","#631f29","#607fe6","#5b78d9",
+                   "#4b63b3","#3b4e8c","#2b3966","#52faf4","#42c7c2","#319491",
+                   "#20615f","#0f2e2d","#ff66cc","#cc52a3","#993d7a","#662952",
+                   "#331429","#030102","#73ff6e","#61d95d","#50b34d","#3f8c3c",
+                   "#2e662c","#f26333","#cc532b","#a64423","#80341b","#592513",
+                   "#33150b","#e693ce","#bf7aac","#996289","#734967","#33202e",
+                   "#7af0a3","#67c989","#53a36f","#407d55","#2d573c","#193021")[i]
+}
+
+## continuing with upset()
+Set_sizes <- UpSetR:::FindSetFreqs(New_data, first.col, Num_of_set, Set_names, keep.order)
+  Bar_Q <- NULL
+  if(is.null(queries) == F){
+    Bar_Q <- UpSetR:::intersects(QuerieInterBar, Intersection, New_data, first.col, Num_of_set, All_Freqs, expression, Set_names, palette)
+  }
+  QInter_att_data <- NULL
+  QElem_att_data <- NULL
+  if((is.null(queries) == F) & (is.null(att.x) == F)){
+    QInter_att_data <- UpSetR:::intersects(QuerieInterAtt, Intersection, New_data, first.col, Num_of_set, att.x, att.y,
+                                  expression, Set_names, palette)
+    QElem_att_data <- UpSetR:::elements(QuerieElemAtt, Element, New_data, first.col, expression, Set_names, att.x, att.y,
+                               palette)
+  }
+  AllQueryData <- UpSetR:::combineQueriesData(QInter_att_data, QElem_att_data, customAttDat, att.x, att.y)
+
+  ShadingData <- NULL
+
+  if(is.null(set.metadata) == F){
+    ShadingData <- get_shade_groups(set.metadata, Set_names, Matrix_layout, shade.alpha)
+    output <- Make_set_metadata_plot(set.metadata, Set_names)
+    set.metadata.plots <- output[[1]]
+    set.metadata <- output[[2]]
+
+    if(is.null(ShadingData) == FALSE){
+    shade.alpha <- unique(ShadingData$alpha)
+    }
+  } else {
+    set.metadata.plots <- NULL
+  }
+  if(is.null(ShadingData) == TRUE){
+  ShadingData <- UpSetR:::MakeShading(Matrix_layout, shade.color)
+  }
+  Main_bar <- suppressMessages(UpSetR:::Make_main_bar(All_Freqs, Bar_Q, show.numbers, mb.ratio, customQBar, number.angles, EBar_data, mainbar.y.label,
+                            mainbar.y.max, scale.intersections, text.scale, attribute.plots))
+
+Matrix <- Make_matrix_plot(Matrix_layout, Set_sizes, All_Freqs, point.size, line.size,
+                             text.scale, labels, ShadingData, shade.alpha)
+
+Sizes <- UpSetR:::Make_size_plot(Set_sizes, sets.bar.color, mb.ratio, sets.x.label, scale.sets, text.scale, set_size_angle, set_size.show, set_size.scale_max,set_size.number_size)
+```
+
+```{r upset_plot}
+plot <- structure(class = "upset",
+    .Data=list(
+      Main_bar = Main_bar,
+      Matrix = Matrix,
+      Sizes = Sizes,
+      labels = labels,
+      mb.ratio = mb.ratio,
+      att.x = att.x,
+      att.y = att.y,
+      New_data = New_data,
+      expression = expression,
+      att.pos = att.pos,
+      first.col = first.col,
+      att.color = att.color,
+      AllQueryData = AllQueryData,
+      attribute.plots = attribute.plots,
+      legend = legend,
+      query.legend = query.legend,
+      BoxPlots = BoxPlots,
+      Set_names = Set_names,
+      set.metadata = set.metadata,
+      set.metadata.plots = set.metadata.plots)
+  )
+
+png(filename="upset_stations_all_sites_improved.png", width=9000, height=5000)
+plot
+dev.off()
+```
+
+
+# Plot venn diagram for Wadden filters
+
+```{r upset_legend}
+png(filename="upset_stations_all_sites_legend.png", width=200, height=400)
+
+plot <- plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
+legend_sites <- legend(-0.03,
+                       1,
+                       legend=c("Argentina", "Bangladesh", "Belize", "Brazil",
+                                "CocosIsland", "Coiba", "Everglades", "LordHowe",
+                                "Mauritania", "Mexico", "NewCaledonia",
+                                "Ningaloo", "Philippines", "Seychellen",
+                                "SouthAfrica", "SouthernOcean", "Yemen",
+                                "Wadden", "Scandola","SharkBay"),
+                fill=c("#ade880", "#53a36f", "#7570d1", "#aba433", "#e786eb",
+                                "#5bf9fc", "#ed7351", "#ed6b98", "#cf832d",
+                                "#83b3fc", "#d4fa4b", "#bf81e3", "#fab039",
+                                "#fc4e68", "#607fe6", "#52faf4", "#ff66cc",
+                                "#73ff6e", "#f26333", "#e693ce"),
+                       cex = 0.72)
+
+dev.off()
+```
