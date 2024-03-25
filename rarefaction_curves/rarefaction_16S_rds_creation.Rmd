@@ -1,0 +1,509 @@
+---
+title: "Rarefaction curves of the 1rst batch for MiFish amplicon"
+author: "Enora Geslain"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    number_sections: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(iNEXT)
+library(ggplot2)
+library(phyloseq)
+library(metagMisc)
+library(dplyr)
+library(egor)
+library(ggpubr)
+library(gtools)
+library(mrdwabmisc)
+setwd("C:/Users/enora/Desktop")
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Argentina sample
+
+```{r Argentina}
+Arg <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Argentina_16S/05-dwca/phyloseq_object.rds")
+Arg <- tax_glom(Arg, taxrank = rank_names(Arg)[14])
+Arg
+iNEXT_table <- otu_table(Arg) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Arg <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Arg, file = "iNEXT_data_Arg_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Bangladesh sample
+
+```{r Bangladesh}
+Ban <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Bangladesh_16S/05-dwca/phyloseq_object.rds")
+Ban2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Bangladesh_16S/05-dwca/phyloseq_object.rds")
+OTU_Ban2 <- as(otu_table(Ban2), "matrix")
+OTU_Ban <- as(otu_table(Ban), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Ban2), as.data.frame(OTU_Ban))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Ban2 <- as(tax_table(Ban2), "matrix")
+TAXA_Ban <- as(tax_table(Ban), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Ban2), as.data.frame(TAXA_Ban))
+TAXA_all <- tax_table(TAXA_all)
+Ban_all <- phyloseq(OTU_all, TAXA_all)
+Ban_all <- tax_glom(Ban_all, taxrank = rank_names(Ban_all)[14])
+Ban_all
+iNEXT_table <- otu_table(Ban_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Ban <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Ban, file = "iNEXT_data_Ban_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Belize sample
+
+```{r Belize}
+Bel <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Belize_16S/05-dwca/phyloseq_object.rds")
+Bel2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Belize_16S/05-dwca/phyloseq_object.rds")
+OTU_Bel2 <- as(otu_table(Bel2), "matrix")
+OTU_Bel <- as(otu_table(Bel), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Bel2), as.data.frame(OTU_Bel))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Bel2 <- as(tax_table(Bel2), "matrix")
+TAXA_Bel <- as(tax_table(Bel), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Bel2), as.data.frame(TAXA_Bel))
+TAXA_all <- tax_table(TAXA_all)
+Bel_all <- phyloseq(OTU_all, TAXA_all)
+Bel_all <- tax_glom(Bel_all, taxrank = rank_names(Bel_all)[14])
+Bel_all
+iNEXT_table <- otu_table(Bel_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Bel <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Bel, file = "iNEXT_data_Bel_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Brazil sample
+
+```{r Brazil}
+Bra <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Brazil_16S/05-dwca/phyloseq_object.rds")
+Bra2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Brazil_16S/05-dwca/phyloseq_object.rds")
+OTU_Bra2 <- as(otu_table(Bra2), "matrix")
+OTU_Bra <- as(otu_table(Bra), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Bra2), as.data.frame(OTU_Bra))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Bra2 <- as(tax_table(Bra2), "matrix")
+TAXA_Bra <- as(tax_table(Bra), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Bra2), as.data.frame(TAXA_Bra))
+TAXA_all <- tax_table(TAXA_all)
+Bra_all <- phyloseq(OTU_all, TAXA_all)
+Bra_all <- tax_glom(Bra_all, taxrank = rank_names(Bra_all)[14])
+Bra_all
+iNEXT_table <- otu_table(Bra_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Bra <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Bra, file = "iNEXT_data_Bra_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for CocosIsland sample
+
+```{r CocosIsland}
+Coco <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/CocosIsland_16S/05-dwca/phyloseq_object.rds")
+Coco2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/CocosIsland_16S/05-dwca/phyloseq_object.rds")
+OTU_Coco2 = as(otu_table(Coco2), "matrix")
+OTU_Coco = as(otu_table(Coco), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Coco2), as.data.frame(OTU_Coco))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Coco2 <- as(tax_table(Coco2), "matrix")
+TAXA_Coco <- as(tax_table(Coco), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Coco2), as.data.frame(TAXA_Coco))
+TAXA_all <- tax_table(TAXA_all)
+Coco_all <- phyloseq(OTU_all, TAXA_all)
+Coco_all <- tax_glom(Coco_all, taxrank = rank_names(Coco_all)[14])
+Coco_all
+iNEXT_table <- otu_table(Coco_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Coco <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Coco, file = "iNEXT_data_Coco_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Coiba sample
+
+```{r Coiba}
+Coi <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Coiba_16S/05-dwca/phyloseq_object.rds")
+Coi2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Coiba_16S/05-dwca/phyloseq_object.rds")
+OTU_Coi2 <- as(otu_table(Coi2), "matrix")
+OTU_Coi <- as(otu_table(Coi), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Coi2), as.data.frame(OTU_Coi))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Coi2 <- as(tax_table(Coi2), "matrix")
+TAXA_Coi <- as(tax_table(Coi), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Coi2), as.data.frame(TAXA_Coi))
+TAXA_all <- tax_table(TAXA_all)
+Coi_all <- phyloseq(OTU_all, TAXA_all)
+Coi_all <- tax_glom(Coi_all, taxrank = rank_names(Coi_all)[14])
+Coi_all
+iNEXT_table <- otu_table(Coi_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Coi <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Coi, file = "iNEXT_data_Coi_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Everglades sample
+
+```{r Everglades}
+Eve <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Everglades_16S/05-dwca/phyloseq_object.rds")
+Eve2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Everglades_16S/05-dwca/phyloseq_object.rds")
+OTU_Eve2 <- as(otu_table(Eve2), "matrix")
+OTU_Eve <- as(otu_table(Eve), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Eve2), as.data.frame(OTU_Eve))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Eve2 <- as(tax_table(Eve2), "matrix")
+TAXA_Eve <- as(tax_table(Eve), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Eve2), as.data.frame(TAXA_Eve))
+TAXA_all <- tax_table(TAXA_all)
+Eve_all <- phyloseq(OTU_all, TAXA_all)
+Eve_all <- tax_glom(Eve_all, taxrank = rank_names(Eve_all)[14])
+Eve_all
+iNEXT_table <- otu_table(Eve_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Eve <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Eve, file = "iNEXT_data_Eve_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for LordHowe sample
+
+```{r LordHowe}
+Lor <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/LordHowe_16S/05-dwca/phyloseq_object.rds")
+Lor2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/LordHowe_16S/05-dwca/phyloseq_object.rds")
+OTU_Lor2 <- as(otu_table(Lor2), "matrix")
+OTU_Lor <- as(otu_table(Lor), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Lor2), as.data.frame(OTU_Lor))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Lor2 <- as(tax_table(Lor2), "matrix")
+TAXA_Lor <- as(tax_table(Lor), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Lor2), as.data.frame(TAXA_Lor))
+TAXA_all <- tax_table(TAXA_all)
+Lor_all <- phyloseq(OTU_all, TAXA_all)
+Lor_all <- tax_glom(Lor_all, taxrank = rank_names(Lor_all)[14])
+Lor_all
+iNEXT_table <- otu_table(Lor_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Lor <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Lor, file = "iNEXT_data_Lor_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Mauritania sample
+
+```{r Mauritania}
+Mau <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Mauritania_16S/05-dwca/phyloseq_object.rds")
+Mau2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Mauritania_16S/05-dwca/phyloseq_object.rds")
+OTU_Mau2 <- as(otu_table(Mau2), "matrix")
+OTU_Mau <- as(otu_table(Mau), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Mau2), as.data.frame(OTU_Mau))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Mau2 <- as(tax_table(Mau2), "matrix")
+TAXA_Mau <- as(tax_table(Mau), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Mau2), as.data.frame(TAXA_Mau))
+TAXA_all <- tax_table(TAXA_all)
+Mau_all <- phyloseq(OTU_all, TAXA_all)
+Mau_all <- tax_glom(Mau_all, taxrank = rank_names(Mau_all)[14])
+Mau_all
+iNEXT_table <- otu_table(Mau_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Mau <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Mau, file = "iNEXT_data_Mau_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Mexico sample
+
+```{r Mexico}
+Mex <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Mexico_16S/05-dwca/phyloseq_object.rds")
+Mex2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Mexico_16S/05-dwca/phyloseq_object.rds")
+OTU_Mex2 <- as(otu_table(Mex2), "matrix")
+OTU_Mex <- as(otu_table(Mex), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Mex2), as.data.frame(OTU_Mex))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Mex2 <- as(tax_table(Mex2), "matrix")
+TAXA_Mex <- as(tax_table(Mex), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Mex2), as.data.frame(TAXA_Mex))
+TAXA_all <- tax_table(TAXA_all)
+Mex_all <- phyloseq(OTU_all, TAXA_all)
+Mex_all <- tax_glom(Mex_all, taxrank = rank_names(Mex_all)[14])
+Mex_all
+iNEXT_table <- otu_table(Mex_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Mex <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Mex, file = "iNEXT_data_Mex_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for NewCaledonia sample
+
+```{r NewCaledonia}
+New <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/NewCaledonia_16S/05-dwca/phyloseq_object.rds")
+New2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/NewCaledonia_16S/05-dwca/phyloseq_object.rds")
+OTU_New2 <- as(otu_table(New2), "matrix")
+OTU_New <- as(otu_table(New), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_New2), as.data.frame(OTU_New))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_New2 <- as(tax_table(New2), "matrix")
+TAXA_New <- as(tax_table(New), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_New2), as.data.frame(TAXA_New))
+TAXA_all <- tax_table(TAXA_all)
+New_all <- phyloseq(OTU_all, TAXA_all)
+New_all <- tax_glom(New_all, taxrank = rank_names(New_all)[14])
+New_all
+iNEXT_table <- otu_table(New_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_New <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_New, file = "iNEXT_data_New_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Ningaloo sample
+
+```{r Ningaloo}
+Nin <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Ningaloo_16S/05-dwca/phyloseq_object.rds")
+Nin2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Ningaloo_16S/05-dwca/phyloseq_object.rds")
+OTU_Nin2 <- as(otu_table(Nin2), "matrix")
+OTU_Nin <- as(otu_table(Nin), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Nin2), as.data.frame(OTU_Nin))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Nin2 <- as(tax_table(Nin2), "matrix")
+TAXA_Nin <- as(tax_table(Nin), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Nin2), as.data.frame(TAXA_Nin))
+TAXA_all <- tax_table(TAXA_all)
+Nin_all <- phyloseq(OTU_all, TAXA_all)
+Nin_all <- tax_glom(Nin_all, taxrank = rank_names(Nin_all)[14])
+Nin_all
+iNEXT_table <- otu_table(Nin_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Nin <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Nin, file = "iNEXT_data_Nin_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Philippines sample
+
+```{r Philippines}
+Phi <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Philippines_16S/05-dwca/phyloseq_object.rds")
+Phi2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Philippines_16S/05-dwca/phyloseq_object.rds")
+OTU_Phi2 <- as(otu_table(Phi2), "matrix")
+OTU_Phi <- as(otu_table(Phi), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Phi2), as.data.frame(OTU_Phi))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Phi2 <- as(tax_table(Phi2), "matrix")
+TAXA_Phi <- as(tax_table(Phi), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Phi2), as.data.frame(TAXA_Phi))
+TAXA_all <- tax_table(TAXA_all)
+Phi_all <- phyloseq(OTU_all, TAXA_all)
+Phi_all <- tax_glom(Phi_all, taxrank = rank_names(Phi_all)[14])
+Phi_all
+iNEXT_table <- otu_table(Phi_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Phi <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Phi, file = "iNEXT_data_Phi_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Scandola sample
+
+```{r Scandola}
+Sca <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Scandola_16S/05-dwca/phyloseq_object.rds")
+Sca2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Scandola_16S/05-dwca/phyloseq_object.rds")
+OTU_Sca2 <- as(otu_table(Sca2), "matrix")
+OTU_Sca <- as(otu_table(Sca), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Sca2), as.data.frame(OTU_Sca))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Sca2 <- as(tax_table(Sca2), "matrix")
+TAXA_Sca <- as(tax_table(Sca), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Sca2), as.data.frame(TAXA_Sca))
+TAXA_all <- tax_table(TAXA_all)
+Sca_all <- phyloseq(OTU_all, TAXA_all)
+Sca_all <- tax_glom(Sca_all, taxrank = rank_names(Sca_all)[14])
+Sca_all
+iNEXT_table <- otu_table(Sca_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Sca <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Sca, file = "iNEXT_data_Sca_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Seychellen sample
+
+```{r Seychellen}
+Sey <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Seychellen_16S/05-dwca/phyloseq_object.rds")
+Sey2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Seychellen_16S/05-dwca/phyloseq_object.rds")
+OTU_Sey2 <- as(otu_table(Sey2), "matrix")
+OTU_Sey <- as(otu_table(Sey), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Sey2), as.data.frame(OTU_Sey))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Sey2 <- as(tax_table(Sey2), "matrix")
+TAXA_Sey <- as(tax_table(Sey), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Sey2), as.data.frame(TAXA_Sey))
+TAXA_all <- tax_table(TAXA_all)
+Sey_all <- phyloseq(OTU_all, TAXA_all)
+Sey_all <- tax_glom(Sey_all, taxrank = rank_names(Sey_all)[14])
+Sey_all
+iNEXT_table <- otu_table(Sey_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Sey <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Sey, file = "iNEXT_data_Sey_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for SharkBay sample
+
+```{r SharkBay}
+Sha <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/SharkBay_16S/05-dwca/phyloseq_object.rds")
+Sha2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/SharkBay_16S/05-dwca/phyloseq_object.rds")
+OTU_Sha2 <- as(otu_table(Sha2), "matrix")
+OTU_Sha <- as(otu_table(Sha), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Sha2), as.data.frame(OTU_Sha))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Sha2 <- as(tax_table(Sha2), "matrix")
+TAXA_Sha <- as(tax_table(Sha), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Sha2), as.data.frame(TAXA_Sha))
+TAXA_all <- tax_table(TAXA_all)
+Sha_all <- phyloseq(OTU_all, TAXA_all)
+Sha_all <- tax_glom(Sha_all, taxrank = rank_names(Sha_all)[14])
+Sha_all
+iNEXT_table <- otu_table(Sha_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Sha <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Sha, file = "iNEXT_data_Sha_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for SouthAfrica sample
+
+```{r SouthAfrica}
+SoA <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/SouthAfrica_16S/05-dwca/phyloseq_object.rds")
+SoA2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/SouthAfrica_16S/05-dwca/phyloseq_object.rds")
+OTU_SoA2 <- as(otu_table(SoA2), "matrix")
+OTU_SoA <- as(otu_table(SoA), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_SoA2), as.data.frame(OTU_SoA))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_SoA2 <- as(tax_table(SoA2), "matrix")
+TAXA_SoA <- as(tax_table(SoA), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_SoA2), as.data.frame(TAXA_SoA))
+TAXA_all <- tax_table(TAXA_all)
+SoA_all <- phyloseq(OTU_all, TAXA_all)
+SoA_all <- tax_glom(SoA_all, taxrank = rank_names(SoA_all)[14])
+SoA_all
+iNEXT_table <- otu_table(SoA_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_SoA <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_SoA, file = "iNEXT_data_SoA_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for SouthernOcean sample
+
+```{r SouthernOcean}
+SoO <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/SouthernOcean_16S/05-dwca/phyloseq_object.rds")
+SoO2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/SouthernOcean_16S/05-dwca/phyloseq_object.rds")
+OTU_SoO2 <- as(otu_table(SoO2), "matrix")
+OTU_SoO <- as(otu_table(SoO), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_SoO2), as.data.frame(OTU_SoO))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_SoO2 <- as(tax_table(SoO2), "matrix")
+TAXA_SoO <- as(tax_table(SoO), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_SoO2), as.data.frame(TAXA_SoO))
+TAXA_all <- tax_table(TAXA_all)
+SoO_all <- phyloseq(OTU_all, TAXA_all)
+SoO_all <- tax_glom(SoO_all, taxrank = rank_names(SoO_all)[14])
+SoO_all
+iNEXT_table <- otu_table(SoO_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_SoO <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_SoO, file = "iNEXT_data_SoO_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Wadden sample
+
+```{r Wadden}
+Wad <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Wadden_16S/05-dwca/phyloseq_object.rds")
+Wad2 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Wadden_16S/05-dwca/phyloseq_object.rds")
+Wad3 <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/WaddenB_16S/05-dwca/phyloseq_object.rds")
+OTU_Wad2 <- as(otu_table(Wad2), "matrix")
+OTU_Wad <- as(otu_table(Wad), "matrix")
+OTU_Wad3 <- as(otu_table(Wad3), "matrix")
+OTU_all <- plyr::rbind.fill(as.data.frame(OTU_Wad2), as.data.frame(OTU_Wad), as.data.frame(OTU_Wad3))
+OTU_all[is.na(OTU_all)] <- 0
+OTU_all <- otu_table(OTU_all, taxa_are_rows = TRUE)
+TAXA_Wad2 <- as(tax_table(Wad2), "matrix")
+TAXA_Wad <- as(tax_table(Wad), "matrix")
+TAXA_Wad3 <- as(tax_table(Wad3), "matrix")
+TAXA_all <- plyr::rbind.fill(as.data.frame(TAXA_Wad2), as.data.frame(TAXA_Wad), as.data.frame(TAXA_Wad3))
+TAXA_all <- tax_table(TAXA_all)
+Wad_all <- phyloseq(OTU_all, TAXA_all)
+Wad_all <- tax_glom(Wad_all, taxrank = rank_names(Wad_all)[14])
+Wad_all
+iNEXT_table <- otu_table(Wad_all) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+# Remove lists of 0
+iNEXT_correct <- iNEXT_input[-1]
+iNEXT_correct2 <- iNEXT_correct[-27]
+iNEXT_correct <- iNEXT_correct2[-35]
+iNEXT_data_Wad <- iNEXT(iNEXT_correct, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Wad, file = "iNEXT_data_Wad_16S.rds")
+
+```
+
+
+# Plot rarefaction curves of Mifish amplicon for Yemen sample
+
+```{r Yemen}
+Yem <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Yemen_16S/05-dwca/phyloseq_object.rds")
+Yem <- tax_glom(Yem, taxrank = rank_names(Yem)[14])
+Yem
+iNEXT_table <- otu_table(Yem) %>% t() %>% data.frame()
+iNEXT_input <- as.list(as.data.frame(t(iNEXT_table)))
+iNEXT_data_Yem <- iNEXT(iNEXT_input, q = c(0), datatype = "abundance")
+saveRDS(iNEXT_data_Yem, file = "iNEXT_data_Yem_16S.rds")
+
+```
