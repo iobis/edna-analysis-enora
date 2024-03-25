@@ -1,0 +1,861 @@
+---
+title: "Rarefaction curves of all sites for 16S amplicon"
+author: "Enora Geslain"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    number_sections: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(iNEXT)
+library(ggplot2)
+library(phyloseq)
+library(metagMisc)
+library(dplyr)
+library(egor)
+library(ggpubr)
+library(gtools)
+library(mrdwabmisc)
+setwd("C:/Users/enora/Desktop")
+```
+
+
+# Argentina
+
+```{r Argentina, fig.width=15, fig.height=10}
+iNEXT_data_Arg <- readRDS("iNEXT_data_Arg_16S.rds")
+
+palette <- c("gray34","#4e693a","#88b564","#4e693a","#4e693a","#4e693a","#9bcf72",
+             "#749b55","#9bcf72","#749b55","#749b55","#749b55","#9bcf72",
+             "#ade880","gray34","#88b564","#ade880","#88b564","#88b564",
+             "#9bcf72","#ade880","#ade880")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({ 
+  p1 <- ggiNEXT(iNEXT_data_Arg, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+}) 
+
+# Sample completeness curve
+suppressMessages({ 
+  p2 <- ggiNEXT(iNEXT_data_Arg, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+}) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({ 
+  p3 <- ggiNEXT(iNEXT_data_Arg, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+}) 
+
+suppressMessages({ 
+  suppressWarnings({ 
+ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+  })
+})
+
+```
+
+
+# Bangladesh
+
+```{r Bangladesh, fig.width=15, fig.height=10}
+iNEXT_data_Ban <- readRDS("iNEXT_data_Ban_16S.rds")
+
+palette <- c("grey34","#2d573c","#53a36f","#67c989","#193021","#2d573c",
+             "#2d573c","#53a36f","#53a36f","#7af0a3","#67c989","#7af0a3",
+             "#7af0a3","#407d55","#2d573c","#67c989","#67c989","#407d55",
+             "#407d55","#407d55","#7af0a3","#53a36f")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({
+  p1 <- ggiNEXT(iNEXT_data_Ban, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+# Sample completeness curve
+suppressMessages({
+  p2 <- ggiNEXT(iNEXT_data_Ban, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({
+  p3 <- ggiNEXT(iNEXT_data_Ban, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+suppressMessages({
+  suppressWarnings({
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    })
+  })
+
+```
+
+
+# Belize
+
+```{r Belize, fig.width=15, fig.height=10}
+iNEXT_data_Bel <- readRDS("iNEXT_data_Bel_16S.rds")
+
+palette <- c("grey34","#21203b","#625ead","#4c4987","#4c4987","#625ead",
+             "#21203b","#625ead","#373461","#625ead","#7570d1","#373461",
+             "#373461","#4c4987","#21203b","#4c4987","#21203b","#373461")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({
+  p1 <- ggiNEXT(iNEXT_data_Bel, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+# Sample completeness curve
+suppressMessages({  
+  p2 <- ggiNEXT(iNEXT_data_Bel, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({  p3 <- ggiNEXT(iNEXT_data_Bel, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+}) 
+
+suppressMessages({
+  suppressWarnings({
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    })
+  })
+
+```
+
+
+# Brazil
+
+```{r Brazil, fig.width=15, fig.height=10}
+iNEXT_data_Bra <- readRDS("iNEXT_data_Bra_16S.rds")
+
+palette <- c("gray34","#454215","#787424","#aba433","#aba433","#454215","#aba433",
+             "gray34","#787424","#787424","#aba433","#454215","#454215",
+             "#787424")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({
+  p1 <- ggiNEXT(iNEXT_data_Bra, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+# Sample completeness curve
+suppressMessages({  p2 <- ggiNEXT(iNEXT_data_Bra, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+}) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({  p3 <- ggiNEXT(iNEXT_data_Bra, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+}) 
+
+suppressMessages({
+  suppressWarnings({
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    })
+  })
+
+```
+
+
+# CocosIsland
+
+```{r CocosIsland, fig.width=15, fig.height=10}
+iNEXT_data_Coco <- readRDS("iNEXT_data_Coco_16S.rds")
+
+palette <- c("gray34","#1e111f","#9c5a9e","#b669b8","#b669b8","#834c85",
+             "#e786eb","#9c5a9e","#ce77d1","#9c5a9e","#e786eb","#1e111f",
+             "#b669b8","#9c5a9e","#b669b8","#e786eb","#834c85","#1e111f",
+             "#834c85","#834c85","#e786eb","#1e111f","#ce77d1","#ce77d1",
+             "#ce77d1","#ce77d1")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({  p1 <- ggiNEXT(iNEXT_data_Coco, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+}) 
+
+# Sample completeness curve
+suppressMessages({  p2 <- ggiNEXT(iNEXT_data_Coco, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+}) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({  p3 <- ggiNEXT(iNEXT_data_Coco, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+}) 
+
+
+suppressMessages({
+  suppressWarnings({
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    })
+  })
+
+```
+
+
+# Coiba
+
+```{r Coiba, fig.width=15, fig.height=10}
+iNEXT_data_Coi <- readRDS("iNEXT_data_Coi_16S.rds")
+
+palette <- c("#5bf9fc","#246263","#3fadaf","#3fadaf","#246263","#32888a",
+             "#5bf9fc","#163d3d","#32888a","#246263","#4dd4d6","#246263",
+             "#5bf9fc","#3fadaf","#4dd4d6","#3fadaf","#4dd4d6","#4dd4d6",
+             "#5bf9fc","#32888a","#32888a","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({
+  p1 <- ggiNEXT(iNEXT_data_Coi, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+}) 
+
+# Sample completeness curve
+suppressMessages({
+  p2 <- ggiNEXT(iNEXT_data_Coi, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({
+  p3 <- ggiNEXT(iNEXT_data_Coi, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+suppressMessages({  
+  suppressWarnings({
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    })
+  })
+
+```
+
+
+# Everglades
+
+```{r Everglades, fig.width=15, fig.height=10}
+iNEXT_data_Eve <- readRDS("iNEXT_data_Eve_16S.rds")
+
+palette <- c("#ed7351","#54291d","#a14e37","#c86145","#c86145","#ed7351",
+             "#ed7351","#7a3b2a","#54291d","#54291d","#54291d","#c86145",
+             "#7a3b2a","#7a3b2a","#7a3b2a","#c86145","#ed7351","#7a3b2a",
+             "#a14e37","#a14e37","#a14e37","gray34","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({
+  p1 <- ggiNEXT(iNEXT_data_Eve, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+# Sample completeness curve
+suppressMessages({
+  p2 <- ggiNEXT(iNEXT_data_Eve, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({
+  p3 <- ggiNEXT(iNEXT_data_Eve, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+suppressMessages({  
+  suppressWarnings({
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    })
+  })
+
+```
+
+
+# LordHowe
+
+```{r LordHowe, fig.width=15, fig.height=10}
+iNEXT_data_Lor <- readRDS("iNEXT_data_Lor_16S.rds")
+
+palette <- c("#542636","#c75980","#c75980","#c75980","#7a374f","#7a374f",
+             "#ed6b98","gray34","#542636","#a14867","#a14867","#ed6b98",
+             "#a14867","#a14867","#542636","#7a374f","#7a374f","#c75980",
+             "#ed6b98","#ed6b98","#542636","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({
+  p1 <- ggiNEXT(iNEXT_data_Lor, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+# Sample completeness curve
+suppressMessages({
+  p2 <- ggiNEXT(iNEXT_data_Lor, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({
+  p3 <- ggiNEXT(iNEXT_data_Lor, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+suppressMessages({  
+  suppressWarnings({
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    })
+  })
+
+```
+
+
+# Mauritania
+
+```{r Mauritania, fig.width=15, fig.height=10}
+iNEXT_data_Mau <- readRDS("iNEXT_data_Mau_16S.rds")
+
+palette <- c("#cf832d","#cf832d","#cf832d","#cf832d","#cf832d","#cf832d",
+             "#cf832d","#cf832d","#cf832d","#cf832d","#cf832d","#cf832d",
+             "#cf832d","#cf832d","#cf832d","#cf832d","#cf832d","#cf832d",
+             "#cf832d","#cf832d","#cf832d","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({
+  p1 <- ggiNEXT(iNEXT_data_Mau, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+# Sample completeness curve
+suppressMessages({
+  p2 <- ggiNEXT(iNEXT_data_Mau, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({
+  p3 <- ggiNEXT(iNEXT_data_Mau, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+suppressMessages({    
+  suppressWarnings({  
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    })
+  })
+
+```
+
+
+# Mexico
+
+```{r Mexico, fig.width=15, fig.height=10}
+iNEXT_data_Mex <- readRDS("iNEXT_data_Mex_16S.rds")
+
+palette <- c("#698fca","#698fca","#344763","#83b3fc","#83b3fc","#4e6b96",
+             "#83b3fc","#698fca","#4e6b96","#83b3fc","#83b3fc","gray34",
+             "#344763","#698fca","#344763","#83b3fc","#83b3fc","#4e6b96",
+             "#83b3fc","#344763","#4e6b96","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({
+  p1 <- ggiNEXT(iNEXT_data_Mex, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+# Sample completeness curve
+suppressMessages({
+  p2 <- ggiNEXT(iNEXT_data_Mex, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({
+  p3 <- ggiNEXT(iNEXT_data_Mex, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+suppressMessages({    
+  suppressWarnings({  
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    })
+  })
+
+```
+
+
+# NewCaledonia
+
+```{r NewCaledonia, fig.width=15, fig.height=10}
+iNEXT_data_New <- readRDS("iNEXT_data_New_16S.rds")
+
+palette <- c("#d4fa4b","#52611d","#b4d43f","#52611d","#94ae35","#738729",
+             "#738729","#52611d","#d4fa4b","#94ae35","#b4d43f","#d4fa4b",
+             "#94ae35","#738729","#52611d","#738729","#b4d43f","#94ae35",
+             "#d4fa4b","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({
+  p1 <- ggiNEXT(iNEXT_data_New, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette)
+  }) 
+
+# Sample completeness curve
+suppressMessages({  
+  p2 <- ggiNEXT(iNEXT_data_New, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({  
+  p3 <- ggiNEXT(iNEXT_data_New, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+suppressMessages({    
+  suppressWarnings({  
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    }) 
+  })
+
+```
+
+
+# Ningaloo
+
+```{r Ningaloo, fig.width=15, fig.height=10}
+iNEXT_data_Nin <- readRDS("iNEXT_data_Nin_16S.rds")
+
+palette <- c("#9f6cbd","#7f5696","#7f5696","#3f2a4a","gray34","#9f6cbd",
+             "#3f2a4a","#bf81e3","#3f2a4a","#3f2a4a","#bf81e3","#9f6cbd",
+             "#bf81e3","#7f5696","#3f2a4a","#9f6cbd","#5f4070","#5f4070",
+             "#5f4070","#7f5696","#bf81e3","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({  
+  p1 <- ggiNEXT(iNEXT_data_Nin, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Sample completeness curve
+suppressMessages({  
+  p2 <- ggiNEXT(iNEXT_data_Nin, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({  
+  p3 <- ggiNEXT(iNEXT_data_Nin, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+suppressMessages({    
+  suppressWarnings({  
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    }) 
+  })
+
+```
+
+
+# Philippines
+
+```{r Philippines, fig.width=15, fig.height=10}
+iNEXT_data_Phi <- readRDS("iNEXT_data_Phi_16S.rds")
+
+palette <- c("#875f1f","#d39531","#d39531","#d39531","#875f1f","#d39531",
+             "#fab039","#3b290d","#ad7a28","#614416","#614416","#875f1f",
+             "gray34","#614416","#ad7a28","#3b290d","#fab039","#614416",
+             "#ad7a28","#ad7a28","#875f1f","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({  
+  p1 <- ggiNEXT(iNEXT_data_Phi, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Sample completeness curve
+suppressMessages({  
+  p2 <- ggiNEXT(iNEXT_data_Phi, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({  
+  p3 <- ggiNEXT(iNEXT_data_Phi, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+suppressMessages({    
+  suppressWarnings({  
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    }) 
+  })
+
+```
+
+
+# Scandola
+
+```{r Scandola, fig.width=15, fig.height=10}
+iNEXT_data_Sca <- readRDS("iNEXT_data_Sca_16S.rds")
+
+palette <- c("#80341b","#a64423","gray34","gray34","#a64423","#f26333",
+             "#80341b","#cc532b","#80341b","#80341b","#cc532b","#a64423",
+             "#33150b","#f26333","#80341b","#f26333","#f26333","#a64423",
+             "#cc532b","#cc532b","#592513","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({  
+  p1 <- ggiNEXT(iNEXT_data_Sca, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Sample completeness curve
+suppressMessages({  
+  p2 <- ggiNEXT(iNEXT_data_Sca, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({  
+  p3 <- ggiNEXT(iNEXT_data_Sca, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+suppressMessages({    
+  suppressWarnings({  
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    }) 
+  })
+
+```
+
+
+# Seychellen
+
+```{r Seychellen, fig.width=15, fig.height=10}
+iNEXT_data_Sey <- readRDS("iNEXT_data_Sey_16S.rds")
+
+palette <- c("#d64259","#8a2b39","#8a2b39","gray34","#d64259","#fc4e68",
+             "#b03749","#8a2b39","#b03749","#631f29","#631f29","#d64259",
+             "#d64259","#631f29","#8a2b39","#631f29","#fc4e68","#fc4e68",
+             "#b03749","gray34","#b03749","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({  
+  p1 <- ggiNEXT(iNEXT_data_Sey, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Sample completeness curve
+suppressMessages({  
+  p2 <- ggiNEXT(iNEXT_data_Sey, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({  
+  p3 <- ggiNEXT(iNEXT_data_Sey, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+suppressMessages({    
+  suppressWarnings({  
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    }) 
+  })
+
+```
+
+
+# SharkBay
+
+```{r SharkBay, fig.width=15, fig.height=10}
+iNEXT_data_Sha <- readRDS("iNEXT_data_Sha_16S.rds")
+
+palette <- c("#bf7aac","#bf7aac","#996289","#734967","#bf7aac","#33202e",
+             "#e693ce","#bf7aac","#e693ce","#33202e","#e693ce","gray34",
+             "#734967","#bf7aac","#996289","#33202e","#734967","#996289",
+             "#e693ce","#33202e","#734967","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({  
+  p1 <- ggiNEXT(iNEXT_data_Sha, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Sample completeness curve
+suppressMessages({  
+  p2 <- ggiNEXT(iNEXT_data_Sha, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({  
+  p3 <- ggiNEXT(iNEXT_data_Sha, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+suppressMessages({    
+  suppressWarnings({  
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    }) 
+  })
+
+```
+
+
+# SouthAfrica
+
+```{r SouthAfrica, fig.width=15, fig.height=10}
+iNEXT_data_SoA <- readRDS("iNEXT_data_SoA_16S.rds")
+
+palette <- c("#2b3966","#607fe6","#607fe6","#3b4e8c","#4b63b3","#4b63b3",
+             "#4b63b3","#5b78d9","#607fe6","#5b78d9","#5b78d9","#2b3966",
+             "#2b3966","#2b3966","#3b4e8c","#5b78d9","#3b4e8c","#607fe6",
+             "#4b63b3","#5b78d9","#3b4e8c","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({  
+  p1 <- ggiNEXT(iNEXT_data_SoA, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Sample completeness curve
+suppressMessages({  
+  p2 <- ggiNEXT(iNEXT_data_SoA, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({  
+  p3 <- ggiNEXT(iNEXT_data_SoA, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+suppressMessages({    
+  suppressWarnings({  
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    }) 
+  })
+
+```
+
+
+# SouthernOcean
+
+```{r SouthernOcean, fig.width=15, fig.height=10}
+iNEXT_data_SoO <- readRDS("iNEXT_data_SoO_16S.rds")
+
+palette <- c("#52faf4","#20615f","#319491","#52faf4","#42c7c2","#319491",
+             "#42c7c2","#0f2e2d","#319491","#0f2e2d","#20615f","gray34",
+             "#20615f","#42c7c2","#52faf4","#20615f","#52faf4","#0f2e2d",
+             "#0f2e2d","#319491","#42c7c2","#52faf4","#20615f","gray34",
+             "gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({  
+  p1 <- ggiNEXT(iNEXT_data_SoO, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Sample completeness curve
+suppressMessages({  
+  p2 <- ggiNEXT(iNEXT_data_SoO, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({  
+  p3 <- ggiNEXT(iNEXT_data_SoO, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+suppressMessages({    
+  suppressWarnings({  
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    }) 
+  })
+
+```
+
+
+# Wadden
+
+```{r Wadden, fig.width=15, fig.height=10}
+iNEXT_data_Wad <- readRDS("iNEXT_data_Wad_16S.rds")
+
+palette <- c("gray34","#50b34d","#50b34d","#2e662c","#2e662c","#2e662c",
+             "#61d95d","gray34","#50b34d","#3f8c3c","#3f8c3c","#3f8c3c",
+             "#3f8c3c","#73ff6e","gray34","#2e662c","#50b34d","#2e662c",
+             "#61d95d","#61d95d","#73ff6e","#73ff6e","#61d95d","#73ff6e",
+             "#50b34d","gray34","#73ff6e","#50b34d","#61d95d","#61d95d",
+             "#61d95d","#2e662c","#50b34d","#50b34d","#61d95d","#73ff6e",
+             "#73ff6e","#2e662c","gray34","#50b34d","#2e662c","#2e662c",
+             "#73ff6e","gray34","gray34","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({  
+  p1 <- ggiNEXT(iNEXT_data_Wad, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Sample completeness curve
+suppressMessages({  
+  p2 <- ggiNEXT(iNEXT_data_Wad, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({  
+  p3 <- ggiNEXT(iNEXT_data_Wad, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+suppressMessages({    
+  suppressWarnings({  
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    }) 
+  })
+
+```
+
+
+# Yemen
+
+```{r Yemen, fig.width=15, fig.height=10}
+iNEXT_data_Yem <- readRDS("iNEXT_data_Yem_16S.rds")
+
+palette <- c("#030102","#ff66cc","#331429","#cc52a3","#ff66cc","#662952",
+             "#993d7a","gray34")
+
+# Sample-size-based rarefaction/extrapolation curve
+suppressMessages({  
+  p1 <- ggiNEXT(iNEXT_data_Yem, type=1, color.var = "Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Sample completeness curve
+suppressMessages({  
+  p2 <- ggiNEXT(iNEXT_data_Yem, type=2, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+# Coverage-based rarefaction/extrapolation curve
+suppressMessages({  
+  p3 <- ggiNEXT(iNEXT_data_Yem, type=3, color.var="Assemblage") +
+  scale_colour_manual(values=palette) +
+  scale_fill_manual(values=palette) 
+  }) 
+
+suppressMessages({    
+  suppressWarnings({  
+    ggarrange(p1, p2, p3 + rremove("x.text"), 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2, common.legend = T, legend = "right")
+    }) 
+  })
+
+```
