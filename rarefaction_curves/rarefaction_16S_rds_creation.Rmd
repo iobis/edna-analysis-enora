@@ -1,5 +1,5 @@
 ---
-title: "Rarefaction curves of the 1rst batch for MiFish amplicon"
+title: "Creation of iNEXT objects for 16S amplicon"
 author: "Enora Geslain"
 date: "`r Sys.Date()`"
 output:
@@ -24,7 +24,7 @@ setwd("C:/Users/enora/Desktop")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for Argentina sample
+# Argentina
 
 ```{r Argentina}
 Arg <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Argentina_16S/05-dwca/phyloseq_object.rds")
@@ -38,7 +38,7 @@ saveRDS(iNEXT_data_Arg, file = "iNEXT_data_Arg_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for Bangladesh sample
+# Bangladesh
 
 ```{r Bangladesh}
 Ban <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Bangladesh_16S/05-dwca/phyloseq_object.rds")
@@ -63,7 +63,7 @@ saveRDS(iNEXT_data_Ban, file = "iNEXT_data_Ban_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for Belize sample
+# Belize
 
 ```{r Belize}
 Bel <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Belize_16S/05-dwca/phyloseq_object.rds")
@@ -88,7 +88,7 @@ saveRDS(iNEXT_data_Bel, file = "iNEXT_data_Bel_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for Brazil sample
+# Brazil
 
 ```{r Brazil}
 Bra <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Brazil_16S/05-dwca/phyloseq_object.rds")
@@ -113,7 +113,7 @@ saveRDS(iNEXT_data_Bra, file = "iNEXT_data_Bra_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for CocosIsland sample
+# CocosIsland
 
 ```{r CocosIsland}
 Coco <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/CocosIsland_16S/05-dwca/phyloseq_object.rds")
@@ -138,7 +138,7 @@ saveRDS(iNEXT_data_Coco, file = "iNEXT_data_Coco_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for Coiba sample
+# Coiba
 
 ```{r Coiba}
 Coi <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Coiba_16S/05-dwca/phyloseq_object.rds")
@@ -163,7 +163,7 @@ saveRDS(iNEXT_data_Coi, file = "iNEXT_data_Coi_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for Everglades sample
+# Everglades
 
 ```{r Everglades}
 Eve <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Everglades_16S/05-dwca/phyloseq_object.rds")
@@ -188,7 +188,7 @@ saveRDS(iNEXT_data_Eve, file = "iNEXT_data_Eve_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for LordHowe sample
+# LordHowe
 
 ```{r LordHowe}
 Lor <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/LordHowe_16S/05-dwca/phyloseq_object.rds")
@@ -213,7 +213,7 @@ saveRDS(iNEXT_data_Lor, file = "iNEXT_data_Lor_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for Mauritania sample
+# Mauritania
 
 ```{r Mauritania}
 Mau <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Mauritania_16S/05-dwca/phyloseq_object.rds")
@@ -238,7 +238,7 @@ saveRDS(iNEXT_data_Mau, file = "iNEXT_data_Mau_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for Mexico sample
+# Mexico
 
 ```{r Mexico}
 Mex <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Mexico_16S/05-dwca/phyloseq_object.rds")
@@ -263,7 +263,7 @@ saveRDS(iNEXT_data_Mex, file = "iNEXT_data_Mex_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for NewCaledonia sample
+# NewCaledonia
 
 ```{r NewCaledonia}
 New <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/NewCaledonia_16S/05-dwca/phyloseq_object.rds")
@@ -288,7 +288,7 @@ saveRDS(iNEXT_data_New, file = "iNEXT_data_New_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for Ningaloo sample
+# Ningaloo
 
 ```{r Ningaloo}
 Nin <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Ningaloo_16S/05-dwca/phyloseq_object.rds")
@@ -313,7 +313,7 @@ saveRDS(iNEXT_data_Nin, file = "iNEXT_data_Nin_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for Philippines sample
+# Philippines
 
 ```{r Philippines}
 Phi <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Philippines_16S/05-dwca/phyloseq_object.rds")
@@ -338,7 +338,7 @@ saveRDS(iNEXT_data_Phi, file = "iNEXT_data_Phi_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for Scandola sample
+# Scandola
 
 ```{r Scandola}
 Sca <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Scandola_16S/05-dwca/phyloseq_object.rds")
@@ -363,7 +363,7 @@ saveRDS(iNEXT_data_Sca, file = "iNEXT_data_Sca_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for Seychellen sample
+# Seychellen
 
 ```{r Seychellen}
 Sey <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Seychellen_16S/05-dwca/phyloseq_object.rds")
@@ -388,7 +388,7 @@ saveRDS(iNEXT_data_Sey, file = "iNEXT_data_Sey_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for SharkBay sample
+# SharkBay
 
 ```{r SharkBay}
 Sha <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/SharkBay_16S/05-dwca/phyloseq_object.rds")
@@ -413,7 +413,7 @@ saveRDS(iNEXT_data_Sha, file = "iNEXT_data_Sha_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for SouthAfrica sample
+# SouthAfrica
 
 ```{r SouthAfrica}
 SoA <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/SouthAfrica_16S/05-dwca/phyloseq_object.rds")
@@ -438,7 +438,7 @@ saveRDS(iNEXT_data_SoA, file = "iNEXT_data_SoA_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for SouthernOcean sample
+# SouthernOcean
 
 ```{r SouthernOcean}
 SoO <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/SouthernOcean_16S/05-dwca/phyloseq_object.rds")
@@ -463,7 +463,7 @@ saveRDS(iNEXT_data_SoO, file = "iNEXT_data_SoO_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for Wadden sample
+# Wadden
 
 ```{r Wadden}
 Wad <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch1_samples/runs/Wadden_16S/05-dwca/phyloseq_object.rds")
@@ -495,7 +495,7 @@ saveRDS(iNEXT_data_Wad, file = "iNEXT_data_Wad_16S.rds")
 ```
 
 
-# Plot rarefaction curves of Mifish amplicon for Yemen sample
+# Yemen
 
 ```{r Yemen}
 Yem <- readRDS("pacman-pipeline-results-master/eDNAexpeditions_batch2_samples/runs/Yemen_16S/05-dwca/phyloseq_object.rds")
