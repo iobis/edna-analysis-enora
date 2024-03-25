@@ -9,6 +9,9 @@ Each kind of curves are plotted with confidence intervals
 
 ## Informations on the figures
 For each site one curve represents one filter and each filter is colored based on the station it belongs too (same colors as for the upset plots).
+<p align="center">
+<img src="https://github.com/iobis/edna-analysis-enora/blob/master/rarefaction_curves/example_rarefaction_curves.png" alt="example_rarefaction" width="1000"/>
+</p>
 
 ## Information on the scripts
 For each amplicon there is 2 .Rmd files, one generating the iNEXT objects (converted in .rds and available in the folders `iNEXT_objects_?`) and one producing the html report with all the plots.
